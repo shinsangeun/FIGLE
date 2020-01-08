@@ -6,7 +6,7 @@
 
 ### 구성도(초안) :
 
-![figle_configure](https://user-images.githubusercontent.com/20256618/71319993-9b9d2080-24e8-11ea-9768-714bddb8f14e.jpg)
+![figle_configure](https://user-images.githubusercontent.com/20256618/71962331-893b1a80-323c-11ea-892a-e1747bf7d422.jpg)
 
 
 ### 검색 플로우 :
