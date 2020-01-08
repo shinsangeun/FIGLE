@@ -23,9 +23,7 @@
 ### 실행 방법:
 1. ```npm install```
 2. pacakge.json의 start 실행 
-   ```react-scripts start```
-또는
-2. npm start
+   ```react-scripts start``` 또는 npm start
 
 ### 출처:
 - 템플릿 출처: https://www.creative-tim.com/product/argon-dashboard-react#
