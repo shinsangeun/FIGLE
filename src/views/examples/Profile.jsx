@@ -1,4 +1,5 @@
 import React from "react";
+import axios from "axios";
 
 // reactstrap components
 import {
@@ -17,6 +18,47 @@ import {
 import UserHeader from "components/Headers/UserHeader.jsx";
 
 class Profile extends React.Component {
+  
+  constructor()
+  {
+    super()
+
+    this.state ={
+      //닉네임
+      nickname:'',
+      //아이디 시리얼 넘버
+      accessId:'',
+      //레벨
+      level:0,
+    }
+
+    // 이벤트 호출이 텍스트에 입력하고 검색 버튼을 눌렀을 때 나오도록 바꾸어야 함
+    this.getUserId('아무거나다잘함')
+  }
+
+  
+  getUserId = user_name => {
+
+    var req_message = 'https://api.nexon.co.kr/fifaonline4/v1.0/users?nickname=' + user_name
+    try{
+
+      return axios.get(req_message, {
+        // 헤더 값 : 권한 시리얼 정보
+        headers : { Authorization : 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2NvdW50X2lkIjoiMTIyNDc2MTUyOSIsImF1dGhfaWQiOiIyIiwidG9rZW5fdHlwZSI6IkFjY2Vzc1Rva2VuIiwic2VydmljZV9pZCI6IjQzMDAxMTQ4MSIsIlgtQXBwLVJhdGUtTGltaXQiOiIyMDAwMDoxMCIsIm5iZiI6MTU3NzAwODc3MywiZXhwIjoxNjQwMDgwNzczLCJpYXQiOjE1NzcwMDg3NzN9.Pv1OIow11dye_uv69wnVleR93fa4fDrmup1oTXVuUuo'}
+        
+      }).then(response => this.setState({nickname : response.data.nickname, accessId : response.data.accessId, level : response.data.level}))
+    }
+    catch (error)
+    {
+      console.error(error);
+    }
+  }
+
+  inputUserInfo() {
+    var user_level = this.state.level;
+    return this.state.nickname + this.state.accessId
+  }
+
   render() {
     return (
       <>
@@ -293,12 +335,12 @@ class Profile extends React.Component {
                         <label>About Me</label>
                         <Input
                           className="form-control-alternative"
-                          placeholder="A few words about you ..."
+                          placeholder={this.inputUserInfo()}
                           rows="4"
-                          defaultValue="A beautiful Dashboard for Bootstrap 4. It is Free and
-                          Open Source."
+                          defaultValue={this.inputUserInfo()}
                           type="textarea"
                         />
+                        <label>{this.state.level}</label>
                       </FormGroup>
                     </div>
                   </Form>
