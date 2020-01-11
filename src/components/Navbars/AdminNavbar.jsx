@@ -1,20 +1,3 @@
-/*!
-
-=========================================================
-* Argon Dashboard React - v1.0.0
-=========================================================
-
-* Product Page: https://www.creative-tim.com/product/argon-dashboard-react
-* Copyright 2019 Creative Tim (https://www.creative-tim.com)
-* Licensed under MIT (https://github.com/creativetimofficial/argon-dashboard-react/blob/master/LICENSE.md)
-
-* Coded by Creative Tim
-
-=========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
-*/
 import React from "react";
 import { Link } from "react-router-dom";
 // reactstrap components
@@ -34,8 +17,43 @@ import {
   Container,
   Media
 } from "reactstrap";
+import axios from "axios";
 
 class AdminNavbar extends React.Component {
+  constructor()
+  {
+    super()
+
+    this.state ={
+      //닉네임
+      nickname:'',
+      //아이디 시리얼 넘버
+      accessId:'',
+      //레벨
+      level:0,
+    };
+
+    // 이벤트 호출이 텍스트에 입력하고 검색 버튼을 눌렀을 때 나오도록 바꾸어야 함
+    this.getUserId('아무거나다잘함')
+  }
+
+  getUserId = user_name => {
+
+    var req_message = 'https://api.nexon.co.kr/fifaonline4/v1.0/users?nickname=' + user_name
+    try{
+
+      return axios.get(req_message, {
+        // 헤더 값 : 권한 시리얼 정보
+        headers : { Authorization : 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2NvdW50X2lkIjoiMTIyNDc2MTUyOSIsImF1dGhfaWQiOiIyIiwidG9rZW5fdHlwZSI6IkFjY2Vzc1Rva2VuIiwic2VydmljZV9pZCI6IjQzMDAxMTQ4MSIsIlgtQXBwLVJhdGUtTGltaXQiOiIyMDAwMDoxMCIsIm5iZiI6MTU3NzAwODc3MywiZXhwIjoxNjQwMDgwNzczLCJpYXQiOjE1NzcwMDg3NzN9.Pv1OIow11dye_uv69wnVleR93fa4fDrmup1oTXVuUuo'}
+
+      }).then(response => this.setState({nickname : response.data.nickname, accessId : response.data.accessId, level : response.data.level}))
+    }
+    catch (error)
+    {
+      console.error(error);
+    }
+  };
+
   render() {
     return (
       <>
@@ -71,7 +89,7 @@ class AdminNavbar extends React.Component {
                     </span>
                     <Media className="ml-2 d-none d-lg-block">
                       <span className="mb-0 text-sm font-weight-bold">
-                        Jessica Jones
+                        {this.state.nickname}
                       </span>
                     </Media>
                   </Media>

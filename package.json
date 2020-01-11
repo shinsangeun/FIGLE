@@ -1,5 +1,5 @@
 {
-  "name": "source-map",
+  "name": "FIGLE",
   "version": "1.0.0",
   "main": "index.js",
   "keywords": [
@@ -32,6 +32,7 @@
     "not op_mini all"
   ],
   "dependencies": {
+    "axios": "^0.19.1",
     "chart.js": "2.7.3",
     "classnames": "2.2.6",
     "moment": "2.24.0",
