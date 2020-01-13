@@ -67,3 +67,21 @@
         }
     }
 }
+
+.navbar-user-search {
+    .input-group {
+        border-radius: $navbar-search-border-radius;
+        border: $navbar-search-border-width solid;
+        background-color: transparent;
+
+        .input-group-text {
+            background-color: transparent;
+            padding-left: 1rem;
+        }
+    }
+
+    .form-control {
+        width: $navbar-user-search-width;
+        background-color: transparent;
+    }
+}

@@ -5,6 +5,7 @@ import Register from "views/examples/Register.jsx";
 import Login from "views/examples/Login.jsx";
 import Tables from "views/examples/Tables.jsx";
 import Icons from "views/examples/Icons.jsx";
+import GetUserId from "./components/GetUserId";
 
 var routes = [
   {
@@ -55,6 +56,14 @@ var routes = [
     icon: "ni ni-circle-08 text-pink",
     component: Register,
     layout: "/auth"
+  },
+  {
+    path: "/userinfo",
+    name: "UserInfo",
+    icon: "",
+    component: GetUserId,
+    layout: "/auth"
+
   }
 ];
 export default routes;

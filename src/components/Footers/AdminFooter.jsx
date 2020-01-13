@@ -4,6 +4,12 @@ import React from "react";
 import { Container, Row, Col, Nav, NavItem, NavLink } from "reactstrap";
 
 class Footer extends React.Component {
+
+  constructor(props)
+  {
+    super(props);
+  }
+  
   render() {
     return (
       <footer className="footer">
