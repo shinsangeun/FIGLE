@@ -21,10 +21,10 @@ class Header extends React.Component {
                             tag="h5"
                             className="text-uppercase text-muted mb-0"
                           >
-                            Traffic
+                            총 경기수
                           </CardTitle>
                           <span className="h2 font-weight-bold mb-0">
-                            350,897
+                            22
                           </span>
                         </div>
                         <Col className="col-auto">
@@ -51,10 +51,10 @@ class Header extends React.Component {
                             tag="h5"
                             className="text-uppercase text-muted mb-0"
                           >
-                            New users
+                            승리 횟수
                           </CardTitle>
                           <span className="h2 font-weight-bold mb-0">
-                            2,356
+                            50%
                           </span>
                         </div>
                         <Col className="col-auto">
@@ -65,9 +65,9 @@ class Header extends React.Component {
                       </Row>
                       <p className="mt-3 mb-0 text-muted text-sm">
                         <span className="text-danger mr-2">
-                          <i className="fas fa-arrow-down" /> 3.48%
+                          <i className="fas fa-arrow-down" /> 50%
                         </span>{" "}
-                        <span className="text-nowrap">Since last week</span>
+                        <span className="text-nowrap">최근 100 경기 중</span>
                       </p>
                     </CardBody>
                   </Card>
@@ -81,9 +81,9 @@ class Header extends React.Component {
                             tag="h5"
                             className="text-uppercase text-muted mb-0"
                           >
-                            Sales
+                            패배 횟수
                           </CardTitle>
-                          <span className="h2 font-weight-bold mb-0">924</span>
+                          <span className="h2 font-weight-bold mb-0">30%</span>
                         </div>
                         <Col className="col-auto">
                           <div className="icon icon-shape bg-yellow text-white rounded-circle shadow">
@@ -93,9 +93,9 @@ class Header extends React.Component {
                       </Row>
                       <p className="mt-3 mb-0 text-muted text-sm">
                         <span className="text-warning mr-2">
-                          <i className="fas fa-arrow-down" /> 1.10%
+                          <i className="fas fa-arrow-down" /> 30%
                         </span>{" "}
-                        <span className="text-nowrap">Since yesterday</span>
+                        <span className="text-nowrap">최근 100 경기 중</span>
                       </p>
                     </CardBody>
                   </Card>
@@ -109,11 +109,9 @@ class Header extends React.Component {
                             tag="h5"
                             className="text-uppercase text-muted mb-0"
                           >
-                            Performance
+                            무승부 횟수
                           </CardTitle>
-                          <span className="h2 font-weight-bold mb-0">
-                            49,65%
-                          </span>
+                          <span className="h2 font-weight-bold mb-0">20%</span>
                         </div>
                         <Col className="col-auto">
                           <div className="icon icon-shape bg-info text-white rounded-circle shadow">
@@ -123,9 +121,9 @@ class Header extends React.Component {
                       </Row>
                       <p className="mt-3 mb-0 text-muted text-sm">
                         <span className="text-success mr-2">
-                          <i className="fas fa-arrow-up" /> 12%
+                          <i className="fas fa-arrow-up" /> 20%
                         </span>{" "}
-                        <span className="text-nowrap">Since last month</span>
+                        <span className="text-nowrap">최근 100 경기 중</span>
                       </p>
                     </CardBody>
                   </Card>

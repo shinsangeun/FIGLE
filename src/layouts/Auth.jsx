@@ -91,7 +91,7 @@ class Auth extends React.Component {
                                  value={this.state.nickname}
                                  onChange={this.handleChange}
                           ></input>
-                        <Button type="submit" href='/admin/tables/'>검색</Button>
+                        <Button type="submit" href={`/admin/tables/users?accessId=${this.state.accessId}`}>검색</Button>
                       </div>
                   </div>
               </form>
