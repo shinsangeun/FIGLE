@@ -33,27 +33,57 @@ class Tables extends React.Component {
     };
   }
 
-  componentDidMount= () => {
-    const parsed = queryString.parse(this.props.location.search);
-    const search = this.props.location.search;
-    const params = new URLSearchParams(search);
-    const accessId = params.get("accessId");
-    const matchtype = 50;                              //50: 공식 경기, 52: 감독 모드
-    const offset = 0;                                  // 리스트에서 가져올 시작 위치
-    const limit = 100;                                 // 리스트에서 가져올 갯수
+  componentDidMount= async () => {
+      await this._getMatchIdList();
+      await this._getMatchIdDetail();
+  };
 
-    let getMatchIdList = 'https://api.nexon.co.kr/fifaonline4/v1.0/users/' + accessId + '/matches?matchtype=' + matchtype + '&offset=' + offset +'&limit=' + limit;
-    try{
-      return axios.get(getMatchIdList, {
-        // 헤더 값 : 권한 시리얼 정보
-        headers : { Authorization : 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2NvdW50X2lkIjoiMTIyNDc2MTUyOSIsImF1dGhfaWQiOiIyIiwidG9rZW5fdHlwZSI6IkFjY2Vzc1Rva2VuIiwic2VydmljZV9pZCI6IjQzMDAxMTQ4MSIsIlgtQXBwLVJhdGUtTGltaXQiOiIyMDAwMDoxMCIsIm5iZiI6MTU3NzAwODc3MywiZXhwIjoxNjQwMDgwNzczLCJpYXQiOjE1NzcwMDg3NzN9.Pv1OIow11dye_uv69wnVleR93fa4fDrmup1oTXVuUuo'}
-      }).then(response =>     //console.log(response.data));
-          this.setState({
+  _getMatchIdList = () => {
+      const search = this.props.location.search;
+      const params = new URLSearchParams(search);
+      const accessId = params.get("accessId");
+      const matchtype = 50;                              //50: 공식 경기, 52: 감독 모드
+      const offset = 0;                                  // 리스트에서 가져올 시작 위치
+      const limit = 100;                                 // 리스트에서 가져올 갯수
+
+      let getMatchIdList = 'https://api.nexon.co.kr/fifaonline4/v1.0/users/' + accessId + '/matches?matchtype=' + matchtype + '&offset=' + offset +'&limit=' + limit;
+      try{
+          return axios.get(getMatchIdList, {
+              // 헤더 값 : 권한 시리얼 정보
+              headers : { Authorization : 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2NvdW50X2lkIjoiMTIyNDc2MTUyOSIsImF1dGhfaWQiOiIyIiwidG9rZW5fdHlwZSI6IkFjY2Vzc1Rva2VuIiwic2VydmljZV9pZCI6IjQzMDAxMTQ4MSIsIlgtQXBwLVJhdGUtTGltaXQiOiIyMDAwMDoxMCIsIm5iZiI6MTU3NzAwODc3MywiZXhwIjoxNjQwMDgwNzczLCJpYXQiOjE1NzcwMDg3NzN9.Pv1OIow11dye_uv69wnVleR93fa4fDrmup1oTXVuUuo'}
+          }).then(response =>
+              this.setState({
+              matchIdList: response.data
+          }));
+      } catch (error) {
+          console.error(error);
+      }
+  };
+
+  _renderMatchList = () => {
+      const MatchList = this.state.matches.map((match, index) => {
+          return <MatchList title = {match.title} matchDate = {match.matchDate} key = {index}/>
+      });
+      return MatchList
+  };
+
+  _getMatchIdDetail = () => {
+      let matchid = this.state.matchIdList;
+      console.log("matchID-->", matchid[0]);
+
+      let getMatchIdDetail = 'https://api.nexon.co.kr/fifaonline4/v1.0/matches/' + matchid[0];
+
+      try{
+          return axios.get(getMatchIdDetail, {
+              // 헤더 값 : 권한 시리얼 정보
+              headers : { Authorization : 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2NvdW50X2lkIjoiMTIyNDc2MTUyOSIsImF1dGhfaWQiOiIyIiwidG9rZW5fdHlwZSI6IkFjY2Vzc1Rva2VuIiwic2VydmljZV9pZCI6IjQzMDAxMTQ4MSIsIlgtQXBwLVJhdGUtTGltaXQiOiIyMDAwMDoxMCIsIm5iZiI6MTU3NzAwODc3MywiZXhwIjoxNjQwMDgwNzczLCJpYXQiOjE1NzcwMDg3NzN9.Pv1OIow11dye_uv69wnVleR93fa4fDrmup1oTXVuUuo'}
+          }).then(response => console.log(response.data));
+          /*this.setState({
             matchIdList : response.data
-          }))
-    } catch (error) {
-      console.error(error);
-    }
+          }))*/
+      } catch (error) {
+          console.error(error);
+      }
   };
 
   render() {
