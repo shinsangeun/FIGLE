@@ -31,7 +31,8 @@ class Tables extends React.Component {
     this.state ={
       isLoading: true,
       matchIdList:'',
-      matchResult:[]
+      matchResult:[],
+      activePage:''
     };
   }
 
@@ -110,8 +111,13 @@ class Tables extends React.Component {
     }
   };
 
+  handlePageChange = (pageNumber) => {
+      console.log(`active page is ${pageNumber}`);
+      this.setState(({activePage: pageNumber}));
+  };
+
   render() {
-    const { matchIdList, matchResult, isLoading} = this.state;
+    const { matchIdList, matchResult, isLoading, activePage} = this.state;
     if(!isLoading){
       console.log("matchList-->", matchResult[0].matchInfo[0].nickname, matchResult[0].matchInfo[0].nickname, isLoading);
     }
