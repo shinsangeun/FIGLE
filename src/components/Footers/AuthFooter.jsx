@@ -13,7 +13,7 @@ class Login extends React.Component {
               <Col xl="6">
                 <div className="copyright text-center text-xl-left text-muted">
                   © 2020{" "}
-                    FIGLE
+                    FIGLE 
                 </div>
               </Col>
               <Col xl="6">
