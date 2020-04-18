@@ -23,7 +23,6 @@ import {
 // core components
 import Header from "components/Headers/Header.jsx";
 import axios from "axios";
-import queryString from "query-string";
 
 class Tables extends React.Component {
   constructor(props) {
@@ -41,6 +40,7 @@ class Tables extends React.Component {
       await this._getMatchIdDetail();
   };
 
+  // 유저 닉네임으로 유저 정보 조회
   _getMatchIdList = () => {
       const search = this.props.location.search;
       const params = new URLSearchParams(search);
@@ -64,6 +64,7 @@ class Tables extends React.Component {
       }
   };
 
+  // 매치 상세 기록 조
   _getMatchIdDetail = () => {
     let MatchIdList = this.state.matchIdList;
     let matchResultArray = [];
@@ -83,7 +84,7 @@ class Tables extends React.Component {
                 matchResult: matchResultArray,
                 isLoading: false
               })
-          })
+          }).then(this._sortByDate(this.state.matchResult));
         } catch (error) {
           console.error(error);
         }
@@ -91,27 +92,45 @@ class Tables extends React.Component {
     }
   };
 
-  handleButton = (matchResult) => {
-    console.log("handleButton-->", matchResult);
+  _sortByDate = (matchResultArray) => {
+    console.log("matchResultArray:" , matchResultArray[0]);
 
-    if(matchResult == "승"){
-      return <Button
-          color="primary"
-          onClick={e => e.preventDefault()}
-          size="sm"
-      >
-      </Button>
-    }else if(matchResult == "패"){
-      return <Button
-          color="warning"
-          onClick={e => e.preventDefault()}
-          size="sm"
-      >
-      </Button>
+    if(matchResultArray != null){
+      for(let i = 0; i<matchResultArray.length; i++) {
+
+        let match_date = matchResultArray[i].matchDate;
+        console.log("match_date:", match_date);
+
+        let sorted_meetings = match_date.sort((a, b) => {
+          return new Date(a.match_date).getTime() -
+              new Date(b.match_date).getTime()
+        }).reverse();
+      }
     }
   };
 
-  handlePageChange = (pageNumber) => {
+  _sortMatchInfo = () => {
+    for(let i = 0; i<this.state.matchResult; i++){
+      if(this.state.matchResult != null && this.state.matchResult[i].accessId == this._getMatchIdList.accessId){
+        console.log("test-->", "true");
+      }else{
+        return;
+      }
+    }
+  };
+
+  // 경기 결과 버튼
+  handleButton = (matchResult) => {
+    if(matchResult == "승"){
+      console.log("matchResult ==승");
+      return <Button color="primary">{matchResult}</Button>
+    }else if(matchResult == "패"){
+      return <Button color="warning">{matchResult}</Button>
+    }
+  };
+
+  // 페이징 처리
+  _handlePageChange = (pageNumber) => {
       console.log(`active page is ${pageNumber}`);
       this.setState(({activePage: pageNumber}));
   };
@@ -119,7 +138,7 @@ class Tables extends React.Component {
   render() {
     const { matchIdList, matchResult, isLoading, activePage} = this.state;
     if(!isLoading){
-      console.log("matchList-->", matchResult[0].matchInfo[0].nickname, matchResult[0].matchInfo[0].nickname, isLoading);
+      console.log("matchList-->", matchResult[0].matchInfo[0].nickname, matchResult[0].matchInfo[1].nickname, isLoading);
     }
 
     return (
@@ -137,10 +156,14 @@ class Tables extends React.Component {
                 <Table className="align-items-center table-flush" responsive>
                   <thead className="thead-light">
                     <tr>
-                      <th scope="col">매치 결과</th>
-                      <th scope="col">매치 날짜</th>
-                      <th scope="col">Status</th>
                       <th scope="col">경기 결과</th>
+                      <th scope="col">매치 ID</th>
+                      <th scope="col"></th>
+                      <th scope="col">골</th>
+                      <th scope="col"></th>
+                      <th scope="col">매치 ID</th>
+                      <th scope="col">경기 결과</th>
+                      <th scope="col">경기 날짜</th>
                     </tr>
                   </thead>
                   {isLoading ? (
@@ -151,19 +174,35 @@ class Tables extends React.Component {
                   <tbody>
                   {matchResult.map((index, matchId) => (
                       <tr>
-                        <th scope="row" key={matchId}>
+                        <th>
+                        <Button onClick={() => {this.handleButton(index.matchInfo[0].matchDetail.matchResult)}} color="success">
+                          {index.matchInfo[0].matchDetail.matchResult}
+                        </Button>
+                        </th>
+                        <th scope="row" key={index.matchInfo[0].accessId}>
                           {index.matchInfo[0].nickname}
                         </th>
                         <th>
-                            {index.matchDate}
+                          <span className="h2 font-weight-bold mb-0">
+                            {index.matchInfo[0].shoot.goalTotal}
+                          </span>
                         </th>
-                        <th scope="row">
-                          {index.matchInfo[0].accessId}
+                        <th>vs</th>
+                        <th>
+                          <span className="h2 font-weight-bold mb-0">
+                            {index.matchInfo[1].shoot.goalTotal}
+                          </span>
+                        </th>
+                        <th scope="row" key={index.matchInfo[1].accessId}>
+                          {index.matchInfo[1].nickname}
                         </th>
                         <th>
-                          <Button onClick={this.handleButton(index.matchInfo[0].matchDetail.matchResult)}>
-                            {index.matchInfo[0].matchDetail.matchResult}
+                          <Button onClick={this.handleButton(index.matchInfo[1].matchDetail.matchResult)} color="warning">
+                            {index.matchInfo[1].matchDetail.matchResult}
                           </Button>
+                        </th>
+                        <th>
+                            {index.matchDate}
                         </th>
                       </tr>
                   ))}
