@@ -28,6 +28,7 @@ class Tables extends React.Component {
   constructor(props) {
     super(props);
     this.state ={
+      accessId:'',
       isLoading: true,
       matchIdList:'',
       matchResult:[],
@@ -42,29 +43,30 @@ class Tables extends React.Component {
 
   // 유저 닉네임으로 유저 정보 조회
   _getMatchIdList = () => {
-      const search = this.props.location.search;
-      const params = new URLSearchParams(search);
-      const accessId = params.get("accessId");
-      const matchtype = 50;                              //50: 공식 경기, 52: 감독 모드
-      const offset = 0;                                  // 리스트에서 가져올 시작 위치
-      const limit = 100;                                 // 리스트에서 가져올 갯수
+    const search = this.props.location.search;
+    const params = new URLSearchParams(search);
+    const accessId = params.get("accessId");
+    const matchtype = 50;                              //50: 공식 경기, 52: 감독 모드
+    const offset = 0;                                  // 리스트에서 가져올 시작 위치
+    const limit = 100;                                 // 리스트에서 가져올 갯수
 
-      let getMatchIdList = 'https://api.nexon.co.kr/fifaonline4/v1.0/users/' + accessId + '/matches?matchtype=' + matchtype + '&offset=' + offset +'&limit=' + limit;
-      try{
-          return axios.get(getMatchIdList, {
-              // 헤더 값 : 권한 시리얼 정보
-              headers : { Authorization : 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2NvdW50X2lkIjoiMTIyNDc2MTUyOSIsImF1dGhfaWQiOiIyIiwidG9rZW5fdHlwZSI6IkFjY2Vzc1Rva2VuIiwic2VydmljZV9pZCI6IjQzMDAxMTQ4MSIsIlgtQXBwLVJhdGUtTGltaXQiOiIyMDAwMDoxMCIsIm5iZiI6MTU3NzAwODc3MywiZXhwIjoxNjQwMDgwNzczLCJpYXQiOjE1NzcwMDg3NzN9.Pv1OIow11dye_uv69wnVleR93fa4fDrmup1oTXVuUuo'}
-          }).then(response =>
-            this.setState({
-              matchIdList: response.data
-            })
-          )
-      } catch (error) {
-          console.error(error);
-      }
+    let getMatchIdList = 'https://api.nexon.co.kr/fifaonline4/v1.0/users/' + accessId + '/matches?matchtype=' + matchtype + '&offset=' + offset +'&limit=' + limit;
+    try{
+        return axios.get(getMatchIdList, {
+            // 헤더 값 : 권한 시리얼 정보
+            headers : { Authorization : 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2NvdW50X2lkIjoiMTIyNDc2MTUyOSIsImF1dGhfaWQiOiIyIiwidG9rZW5fdHlwZSI6IkFjY2Vzc1Rva2VuIiwic2VydmljZV9pZCI6IjQzMDAxMTQ4MSIsIlgtQXBwLVJhdGUtTGltaXQiOiIyMDAwMDoxMCIsIm5iZiI6MTU3NzAwODc3MywiZXhwIjoxNjQwMDgwNzczLCJpYXQiOjE1NzcwMDg3NzN9.Pv1OIow11dye_uv69wnVleR93fa4fDrmup1oTXVuUuo'}
+        }).then(response =>
+          this.setState({
+            accessId: accessId,
+            matchIdList: response.data
+          })
+        )
+    } catch (error) {
+        console.error(error);
+    }
   };
 
-  // 매치 상세 기록 조
+  // 매치 상세 기록 조회
   _getMatchIdDetail = () => {
     let MatchIdList = this.state.matchIdList;
     let matchResultArray = [];
@@ -74,7 +76,7 @@ class Tables extends React.Component {
         return;
       }else{
         let getMatchIdDetail = 'https://api.nexon.co.kr/fifaonline4/v1.0/matches/' + MatchIdList[i];
-        try {
+        try{
           axios.get(getMatchIdDetail, {
             // 헤더 값 : 권한 시리얼 정보
             headers: {Authorization: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2NvdW50X2lkIjoiMTIyNDc2MTUyOSIsImF1dGhfaWQiOiIyIiwidG9rZW5fdHlwZSI6IkFjY2Vzc1Rva2VuIiwic2VydmljZV9pZCI6IjQzMDAxMTQ4MSIsIlgtQXBwLVJhdGUtTGltaXQiOiIyMDAwMDoxMCIsIm5iZiI6MTU3NzAwODc3MywiZXhwIjoxNjQwMDgwNzczLCJpYXQiOjE1NzcwMDg3NzN9.Pv1OIow11dye_uv69wnVleR93fa4fDrmup1oTXVuUuo'}
@@ -84,27 +86,10 @@ class Tables extends React.Component {
                 matchResult: matchResultArray,
                 isLoading: false
               })
-          }).then(this._sortByDate(this.state.matchResult));
-        } catch (error) {
+          })
+        }catch(error){
           console.error(error);
         }
-      }
-    }
-  };
-
-  _sortByDate = (matchResultArray) => {
-    console.log("matchResultArray:" , matchResultArray[0]);
-
-    if(matchResultArray != null){
-      for(let i = 0; i<matchResultArray.length; i++) {
-
-        let match_date = matchResultArray[i].matchDate;
-        console.log("match_date:", match_date);
-
-        let sorted_meetings = match_date.sort((a, b) => {
-          return new Date(a.match_date).getTime() -
-              new Date(b.match_date).getTime()
-        }).reverse();
       }
     }
   };
@@ -119,26 +104,32 @@ class Tables extends React.Component {
     }
   };
 
-  // 경기 결과 버튼
+  // 경기 결과 버튼 색깔
   handleButton = (matchResult) => {
-    if(matchResult == "승"){
-      console.log("matchResult ==승");
-      return <Button color="primary">{matchResult}</Button>
-    }else if(matchResult == "패"){
-      return <Button color="warning">{matchResult}</Button>
+    if(matchResult === "승"){
+      console.log("승....")
+      let bg_color = "success";
+      return bg_color;
+    }else if(matchResult === "패"){
+      let bg_color = "warning";
+      return bg_color;
+    }else if(matchResult === "무"){
+      let bg_color = "secondary";
+      return bg_color;
     }
-  };
-
-  // 페이징 처리
-  _handlePageChange = (pageNumber) => {
-      console.log(`active page is ${pageNumber}`);
-      this.setState(({activePage: pageNumber}));
   };
 
   render() {
     const { matchIdList, matchResult, isLoading, activePage} = this.state;
+
     if(!isLoading){
-      console.log("matchList-->", matchResult[0].matchInfo[0].nickname, matchResult[0].matchInfo[1].nickname, isLoading);
+      // matchDate 내림차순 정렬
+      function date_ascending(a, b) {
+        let dateA = new Date(a['matchDate']);
+        let dateB = new Date(b['matchDate']);
+        return dateA < dateB ? 1 : -1;
+      }
+      this.state.matchResult.sort(date_ascending);
     }
 
     return (
@@ -158,9 +149,7 @@ class Tables extends React.Component {
                     <tr>
                       <th scope="col">경기 결과</th>
                       <th scope="col">매치 ID</th>
-                      <th scope="col"></th>
                       <th scope="col">골</th>
-                      <th scope="col"></th>
                       <th scope="col">매치 ID</th>
                       <th scope="col">경기 결과</th>
                       <th scope="col">경기 날짜</th>
@@ -175,7 +164,7 @@ class Tables extends React.Component {
                   {matchResult.map((index, matchId) => (
                       <tr>
                         <th>
-                        <Button onClick={() => {this.handleButton(index.matchInfo[0].matchDetail.matchResult)}} color="success">
+                        <Button color={this.handleButton(index.matchInfo[0].matchDetail.matchResult)}>
                           {index.matchInfo[0].matchDetail.matchResult}
                         </Button>
                         </th>
@@ -186,9 +175,7 @@ class Tables extends React.Component {
                           <span className="h2 font-weight-bold mb-0">
                             {index.matchInfo[0].shoot.goalTotal}
                           </span>
-                        </th>
-                        <th>vs</th>
-                        <th>
+                          &nbsp;&nbsp; vs &nbsp;&nbsp;
                           <span className="h2 font-weight-bold mb-0">
                             {index.matchInfo[1].shoot.goalTotal}
                           </span>
@@ -197,7 +184,7 @@ class Tables extends React.Component {
                           {index.matchInfo[1].nickname}
                         </th>
                         <th>
-                          <Button onClick={this.handleButton(index.matchInfo[1].matchDetail.matchResult)} color="warning">
+                          <Button color={this.handleButton(index.matchInfo[1].matchDetail.matchResult)}>
                             {index.matchInfo[1].matchDetail.matchResult}
                           </Button>
                         </th>
