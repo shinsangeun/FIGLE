@@ -75,7 +75,7 @@ class Profile extends React.Component {
                         <img
                           alt="..."
                           className="rounded-circle"
-                          src={require("assets/img/theme/team-4-800x800.jpg")}
+                          src={require("assets/img/theme/profile.png")}
                         />
                       </a>
                     </div>
@@ -316,7 +316,6 @@ class Profile extends React.Component {
                           defaultValue={this.inputUserInfo()}
                           type="textarea"
                         />
-                        <label>{this.state.level}</label>
                       </FormGroup>
                     </div>
                   </Form>
