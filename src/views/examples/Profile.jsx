@@ -19,45 +19,34 @@ import UserHeader from "components/Headers/UserHeader.jsx";
 
 class Profile extends React.Component {
   
-  constructor()
-  {
-    super()
-
-    this.state ={
-      //닉네임
-      nickname:'',
-      //아이디 시리얼 넘버
-      accessId:'',
-      //레벨
-      level:0,
-    }
-
-    // 이벤트 호출이 텍스트에 입력하고 검색 버튼을 눌렀을 때 나오도록 바꾸어야 함
-    this.getUserId('아무거나다잘함')
+  constructor(props) {
+    super(props);
+      this.state ={
+          nickname:'',    //닉네임
+          accessId:'',    //아이디 시리얼 넘버
+          level:0,        //레벨
+      };
+    this.getUserId(this.state.nickname)
   }
 
-  
-  getUserId = user_name => {
 
-    var req_message = 'https://api.nexon.co.kr/fifaonline4/v1.0/users?nickname=' + user_name
-    try{
-
-      return axios.get(req_message, {
-        // 헤더 값 : 권한 시리얼 정보
-        headers : { Authorization : 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2NvdW50X2lkIjoiMTIyNDc2MTUyOSIsImF1dGhfaWQiOiIyIiwidG9rZW5fdHlwZSI6IkFjY2Vzc1Rva2VuIiwic2VydmljZV9pZCI6IjQzMDAxMTQ4MSIsIlgtQXBwLVJhdGUtTGltaXQiOiIyMDAwMDoxMCIsIm5iZiI6MTU3NzAwODc3MywiZXhwIjoxNjQwMDgwNzczLCJpYXQiOjE1NzcwMDg3NzN9.Pv1OIow11dye_uv69wnVleR93fa4fDrmup1oTXVuUuo'}
-        
-      }).then(response => this.setState({nickname : response.data.nickname, accessId : response.data.accessId, level : response.data.level}))
-    }
-    catch (error)
-    {
-      console.error(error);
-    }
-  }
-
-  inputUserInfo() {
-    var user_level = this.state.level;
-    return this.state.nickname + this.state.accessId
-  }
+    async getUserId(nickname){
+        let req_message = 'https://api.nexon.co.kr/fifaonline4/v1.0/users?nickname=' + nickname;
+        try{
+            return await axios.get(req_message, {
+                // 헤더 값 : 권한 시리얼 정보
+                headers : { Authorization : 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2NvdW50X2lkIjoiMTIyNDc2MTUyOSIsImF1dGhfaWQiOiIyIiwidG9rZW5fdHlwZSI6IkFjY2Vzc1Rva2VuIiwic2VydmljZV9pZCI6IjQzMDAxMTQ4MSIsIlgtQXBwLVJhdGUtTGltaXQiOiIyMDAwMDoxMCIsIm5iZiI6MTU3NzAwODc3MywiZXhwIjoxNjQwMDgwNzczLCJpYXQiOjE1NzcwMDg3NzN9.Pv1OIow11dye_uv69wnVleR93fa4fDrmup1oTXVuUuo'}
+            }).then(response => this.setState({
+                nickname : response.data.nickname,
+                accessId : response.data.accessId,
+                level : response.data.level
+            }))
+        }
+        catch (error)
+        {
+            console.error(error);
+        }
+    };
 
   render() {
     return (
@@ -164,7 +153,7 @@ class Profile extends React.Component {
                             </label>
                             <Input
                               className="form-control-alternative"
-                              defaultValue="lucky.jesse"
+                              defaultValue={this.state.nickname}
                               id="input-username"
                               placeholder="Username"
                               type="text"
@@ -182,126 +171,14 @@ class Profile extends React.Component {
                             <Input
                               className="form-control-alternative"
                               id="input-email"
-                              placeholder="jesse@example.com"
+                              placeholder="email@email.com"
                               type="email"
                             />
                           </FormGroup>
                         </Col>
                       </Row>
-                      <Row>
-                        <Col lg="6">
-                          <FormGroup>
-                            <label
-                              className="form-control-label"
-                              htmlFor="input-first-name"
-                            >
-                              First name
-                            </label>
-                            <Input
-                              className="form-control-alternative"
-                              defaultValue="Lucky"
-                              id="input-first-name"
-                              placeholder="First name"
-                              type="text"
-                            />
-                          </FormGroup>
-                        </Col>
-                        <Col lg="6">
-                          <FormGroup>
-                            <label
-                              className="form-control-label"
-                              htmlFor="input-last-name"
-                            >
-                              Last name
-                            </label>
-                            <Input
-                              className="form-control-alternative"
-                              defaultValue="Jesse"
-                              id="input-last-name"
-                              placeholder="Last name"
-                              type="text"
-                            />
-                          </FormGroup>
-                        </Col>
-                      </Row>
                     </div>
-                    <hr className="my-4" />
-                    {/* Address */}
-                    <h6 className="heading-small text-muted mb-4">
-                      Contact information
-                    </h6>
                     <div className="pl-lg-4">
-                      <Row>
-                        <Col md="12">
-                          <FormGroup>
-                            <label
-                              className="form-control-label"
-                              htmlFor="input-address"
-                            >
-                              Address
-                            </label>
-                            <Input
-                              className="form-control-alternative"
-                              defaultValue="Bld Mihail Kogalniceanu, nr. 8 Bl 1, Sc 1, Ap 09"
-                              id="input-address"
-                              placeholder="Home Address"
-                              type="text"
-                            />
-                          </FormGroup>
-                        </Col>
-                      </Row>
-                      <Row>
-                        <Col lg="4">
-                          <FormGroup>
-                            <label
-                              className="form-control-label"
-                              htmlFor="input-city"
-                            >
-                              City
-                            </label>
-                            <Input
-                              className="form-control-alternative"
-                              defaultValue="New York"
-                              id="input-city"
-                              placeholder="City"
-                              type="text"
-                            />
-                          </FormGroup>
-                        </Col>
-                        <Col lg="4">
-                          <FormGroup>
-                            <label
-                              className="form-control-label"
-                              htmlFor="input-country"
-                            >
-                              Country
-                            </label>
-                            <Input
-                              className="form-control-alternative"
-                              defaultValue="United States"
-                              id="input-country"
-                              placeholder="Country"
-                              type="text"
-                            />
-                          </FormGroup>
-                        </Col>
-                        <Col lg="4">
-                          <FormGroup>
-                            <label
-                              className="form-control-label"
-                              htmlFor="input-country"
-                            >
-                              Postal code
-                            </label>
-                            <Input
-                              className="form-control-alternative"
-                              id="input-postal-code"
-                              placeholder="Postal code"
-                              type="number"
-                            />
-                          </FormGroup>
-                        </Col>
-                      </Row>
                     </div>
                     <hr className="my-4" />
                     {/* Description */}
@@ -311,9 +188,9 @@ class Profile extends React.Component {
                         <label>About Me</label>
                         <Input
                           className="form-control-alternative"
-                          placeholder={this.inputUserInfo()}
+                          placeholder=""
                           rows="4"
-                          defaultValue={this.inputUserInfo()}
+                          defaultValue=""
                           type="textarea"
                         />
                       </FormGroup>
