@@ -107,7 +107,6 @@ class Tables extends React.Component {
   // 경기 결과 버튼 색깔
   handleButton = (matchResult) => {
     if(matchResult === "승"){
-      console.log("승....")
       let bg_color = "success";
       return bg_color;
     }else if(matchResult === "패"){
