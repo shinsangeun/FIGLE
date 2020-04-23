@@ -2,7 +2,7 @@ import React from "react";
 
 // reactstrap components
 import { Button, Container, Row, Col } from "reactstrap";
-import axios from "axios";
+import AdminNavbar from "../Navbars/AuthNavbar";
 
 class UserHeader extends React.Component {
     constructor(props) {
@@ -14,25 +14,17 @@ class UserHeader extends React.Component {
         };
     }
 
-    async getUserId(nickname){
-        let req_message = 'https://api.nexon.co.kr/fifaonline4/v1.0/users?nickname=' + nickname;
-        try{
-            return await axios.get(req_message, {
-                // 헤더 값 : 권한 시리얼 정보
-                headers : { Authorization : 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2NvdW50X2lkIjoiMTIyNDc2MTUyOSIsImF1dGhfaWQiOiIyIiwidG9rZW5fdHlwZSI6IkFjY2Vzc1Rva2VuIiwic2VydmljZV9pZCI6IjQzMDAxMTQ4MSIsIlgtQXBwLVJhdGUtTGltaXQiOiIyMDAwMDoxMCIsIm5iZiI6MTU3NzAwODc3MywiZXhwIjoxNjQwMDgwNzczLCJpYXQiOjE1NzcwMDg3NzN9.Pv1OIow11dye_uv69wnVleR93fa4fDrmup1oTXVuUuo'}
-            }).then(response => this.setState({
-                nickname : response.data.nickname,
-                accessId : response.data.accessId,
-                level : response.data.level
-            }))
-        }
-        catch (error)
-        {
-            console.error(error);
-        }
-    };
+    async componentDidMount() {
+        const search = this;
+        console.log("search:", search);
 
-  render() {
+        const params = new URLSearchParams(search);
+        const accessId = params.get("accessId");
+
+        await this.setState({accessId: accessId});
+    }
+
+    render() {
     return (
       <>
         <div

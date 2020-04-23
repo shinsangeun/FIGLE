@@ -50,14 +50,21 @@ class Auth extends React.Component {
       return await axios.get(req_message, {
         // 헤더 값 : 권한 시리얼 정보
         headers : { Authorization : 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2NvdW50X2lkIjoiMTIyNDc2MTUyOSIsImF1dGhfaWQiOiIyIiwidG9rZW5fdHlwZSI6IkFjY2Vzc1Rva2VuIiwic2VydmljZV9pZCI6IjQzMDAxMTQ4MSIsIlgtQXBwLVJhdGUtTGltaXQiOiIyMDAwMDoxMCIsIm5iZiI6MTU3NzAwODc3MywiZXhwIjoxNjQwMDgwNzczLCJpYXQiOjE1NzcwMDg3NzN9.Pv1OIow11dye_uv69wnVleR93fa4fDrmup1oTXVuUuo'}
-      }).then(response => this.setState({
-        nickname : response.data.nickname,
-        accessId : response.data.accessId,
-        level : response.data.level
-      }))
-    }
-    catch (error)
-    {
+      }).then(response => {
+        console.log("code:", response.status);
+        console.log("accessId: ", response.accessId);
+
+        if(response.accessId == undefined){
+          alert("해당 닉네임의 유저가 없습니다.")
+        }else{
+          this.setState({
+            nickname : response.data.nickname,
+            accessId : response.data.accessId,
+            level : response.data.level
+          })
+        }
+      })
+    }catch (error){
       console.error(error);
     }
   };
@@ -95,10 +102,6 @@ class Auth extends React.Component {
                       </div>
                   </div>
               </form>
-              {/*<li>닉네임: {this.state.nickname}</li>
-              <li>레벨: {this.state.level}</li>
-              <li>access ID: {this.state.accessId} </li>*/}
-
             <div className="separator separator-bottom separator-skew zindex-100">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -116,8 +119,8 @@ class Auth extends React.Component {
             </div>
           </div>
           {/* Page content */}
-          <Container className="mt--8 pb-5">
-            <Row className="justify-content-center">
+          <Container className="mt--100 pb-9">
+            <Row className="justify-content-center row">
               <Switch>{this.getRoutes(routes)}</Switch>
             </Row>
           </Container>
