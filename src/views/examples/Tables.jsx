@@ -94,16 +94,6 @@ class Tables extends React.Component {
     }
   };
 
-  _sortMatchInfo = () => {
-    for(let i = 0; i<this.state.matchResult; i++){
-      if(this.state.matchResult != null && this.state.matchResult[i].accessId == this._getMatchIdList.accessId){
-        console.log("test-->", "true");
-      }else{
-        return;
-      }
-    }
-  };
-
   // 경기 결과 버튼 색깔
   handleButton = (matchResult) => {
     if(matchResult === "승"){
@@ -119,11 +109,11 @@ class Tables extends React.Component {
   };
 
   render() {
-    const { matchIdList, matchResult, isLoading, activePage} = this.state;
+    const { matchIdList, matchResult, isLoading} = this.state;
 
     if(!isLoading){
       // matchDate 내림차순 정렬
-      function date_ascending(a, b) {
+      function date_ascending(a, b){
         let dateA = new Date(a['matchDate']);
         let dateB = new Date(b['matchDate']);
         return dateA < dateB ? 1 : -1;
@@ -152,6 +142,7 @@ class Tables extends React.Component {
                       <th scope="col">매치 ID</th>
                       <th scope="col">경기 결과</th>
                       <th scope="col">경기 날짜</th>
+                      <th scope="col">경기 보기</th>
                     </tr>
                   </thead>
                   {isLoading ? (
@@ -189,6 +180,11 @@ class Tables extends React.Component {
                         </th>
                         <th>
                             {index.matchDate}
+                        </th>
+                        <th>
+                          <Button color="dark" href={`/admin/user-profile?matchId=${index.matchId}`}>
+                            Detail
+                          </Button>
                         </th>
                       </tr>
                   ))}
