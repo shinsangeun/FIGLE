@@ -40,14 +40,6 @@ class UserHeader extends React.Component {
           <span className="mask bg-gradient-default opacity-8" />
           {/* Header container */}
           <Container className="d-flex align-items-center" fluid>
-            <Row>
-              <Col lg="15" md="12">
-                <h1 className="display-2 text-white">안녕하세요, {this.state.nickname} 님</h1>
-                <p className="text-white mt-0 mb-5">
-                  검색한 유저의 정보 조회 페이지 입니다.
-                </p>
-              </Col>
-            </Row>
           </Container>
         </div>
       </>
