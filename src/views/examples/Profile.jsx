@@ -3,22 +3,21 @@ import axios from "axios";
 
 // reactstrap components
 import {
-  Button,
-  Card,
-  CardHeader,
-  CardBody,
-  FormGroup,
-  Form,
-  Input,
-  Container,
-  Row,
-  Col
+    Button,
+    Card,
+    CardHeader,
+    CardBody,
+    FormGroup,
+    Form,
+    Input,
+    Container,
+    Row,
+    Col, Table
 } from "reactstrap";
 // core components
 import UserHeader from "components/Headers/UserHeader.jsx";
 
 class Profile extends React.Component {
-  
   constructor(props) {
     super(props);
       this.state ={
@@ -31,7 +30,7 @@ class Profile extends React.Component {
   }
 
   componentDidMount = async () => {
-    await this.getMatchIdDatail();
+      await this.getMatchIdDatail();
   };
 
   getMatchIdDatail(){
@@ -47,6 +46,7 @@ class Profile extends React.Component {
         headers: {Authorization: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2NvdW50X2lkIjoiMTIyNDc2MTUyOSIsImF1dGhfaWQiOiIyIiwidG9rZW5fdHlwZSI6IkFjY2Vzc1Rva2VuIiwic2VydmljZV9pZCI6IjQzMDAxMTQ4MSIsIlgtQXBwLVJhdGUtTGltaXQiOiIyMDAwMDoxMCIsIm5iZiI6MTU3NzAwODc3MywiZXhwIjoxNjQwMDgwNzczLCJpYXQiOjE1NzcwMDg3NzN9.Pv1OIow11dye_uv69wnVleR93fa4fDrmup1oTXVuUuo'}
       }).then(response => {
         matchResultArray.push(response.data);
+        console.log("matchResult:" , matchResultArray[0].matchInfo[0].matchDetail.possession)
         this.setState({
           matchResult: matchResultArray,
           isLoading: false
@@ -60,9 +60,10 @@ class Profile extends React.Component {
   render() {
     const {matchResult, isLoading} = this.state;
 
-    if(!isLoading) {
-      console.log("res::", matchResult[0].matchInfo[0].nickname);
-      console.log(this.state.matchResult[0].matchInfo[0].nickname);
+    if(!isLoading){
+        console.log("res:", matchResult[0].matchInfo[0].nickname);
+        console.log(this.state.matchResult[0].matchInfo[0].nickname);
+        console.log("test:", this.state.matchResult[0].matchInfo[0].matchDetail.possession)
     }
 
     return (
@@ -86,24 +87,29 @@ class Profile extends React.Component {
                     </div>
                   </Col>
                 </Row>
+                  {isLoading ? (
+                      <div className="loader">
+                          <span className="loader__text">Loading...</span>
+                      </div>
+                  ) : (
                 <CardBody className="pt-0 pt-md-4">
                   <Row>
                     <div className="col">
                       <div className="card-profile-stats d-flex justify-content-center mt-md-5">
                         <div>
-                          <span className="heading">{this.state.level}</span>
+                          <span className="heading">{this.state.matchResult[0].matchInfo[0].matchDetail.possession}</span>
                           <span className="description">점유율</span>
                         </div>
                         <div>
-                          <span className="heading">10</span>
+                          <span className="heading">{this.state.matchResult[0].matchInfo[0].matchDetail.foul}</span>
                           <span className="description">파울</span>
                         </div>
                         <div>
-                          <span className="heading">89</span>
+                          <span className="heading">{this.state.matchResult[0].matchInfo[0].matchDetail.cornerKick}</span>
                           <span className="description">코너킥</span>
                         </div>
                           <div>
-                              <span className="heading">89</span>
+                              <span className="heading">{this.state.matchResult[0].matchInfo[0].matchDetail.yellowCards}</span>
                               <span className="description">카드</span>
                           </div>
                           <div>
@@ -122,11 +128,10 @@ class Profile extends React.Component {
                     </div>
                   </Row>
                   <div className="text-center">
-                    {/*{matchResult.map((index, matchId) => (*/}
-                    <h3>닉네임 </h3>
-                      {/*  ))}*/}
+                    <h3>{this.state.matchResult[0].matchInfo[0].nickname}</h3>
                   </div>
                 </CardBody>
+                  )}
               </Card>
             </Col>
               <Col className="order-xl-2 mb-5 mb-xl-0" xl="6">
@@ -144,24 +149,29 @@ class Profile extends React.Component {
                               </div>
                           </Col>
                       </Row>
+                      {isLoading ? (
+                          <div className="loader">
+                              <span className="loader__text">Loading...</span>
+                          </div>
+                      ) : (
                       <CardBody className="pt-0 pt-md-4">
                           <Row>
                               <div className="col">
                                   <div className="card-profile-stats d-flex justify-content-center mt-md-5">
                                       <div>
-                                          <span className="heading">{this.state.level}</span>
+                                          <span className="heading">{this.state.matchResult[0].matchInfo[1].matchDetail.possession}</span>
                                           <span className="description">점유율</span>
                                       </div>
                                       <div>
-                                          <span className="heading">10</span>
+                                          <span className="heading">{this.state.matchResult[0].matchInfo[1].matchDetail.foul}</span>
                                           <span className="description">파울</span>
                                       </div>
                                       <div>
-                                          <span className="heading">89</span>
+                                          <span className="heading">{this.state.matchResult[0].matchInfo[1].matchDetail.cornerKick}</span>
                                           <span className="description">코너킥</span>
                                       </div>
                                       <div>
-                                          <span className="heading">89</span>
+                                          <span className="heading">{this.state.matchResult[0].matchInfo[1].matchDetail.yellowCards}</span>
                                           <span className="description">카드</span>
                                       </div>
                                       <div>
@@ -180,11 +190,10 @@ class Profile extends React.Component {
                               </div>
                           </Row>
                           <div className="text-center">
-                              {/*{matchResult.map((index, matchId) => (*/}
-                              <h3>닉네임 </h3>
-                              {/*  ))}*/}
+                              <h3>{this.state.matchResult[0].matchInfo[1].nickname}</h3>
                           </div>
                       </CardBody>
+                      )}
                   </Card>
               </Col>
           </Row>
