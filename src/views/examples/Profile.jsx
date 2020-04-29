@@ -113,15 +113,15 @@ class Profile extends React.Component {
                               <span className="description">카드</span>
                           </div>
                           <div>
-                              <span className="heading">89</span>
+                              <span className="heading">{this.state.matchResult[0].matchInfo[0].pass.passSuccess} / {this.state.matchResult[0].matchInfo[0].pass.passTry}</span>
                               <span className="description">패스 <br/> 성공률</span>
                           </div>
                           <div>
-                              <span className="heading">89</span>
+                              <span className="heading">{this.state.matchResult[0].matchInfo[0].shoot.effectiveShootTotal} / {this.state.matchResult[0].matchInfo[0].shoot.shootTotal}</span>
                               <span className="description">슛 <br/> 성공률</span>
                           </div>
                           <div>
-                              <span className="heading">89</span>
+                              <span className="heading">{this.state.matchResult[0].matchInfo[0].defence.blockSuccess} / {this.state.matchResult[0].matchInfo[0].defence.blockTry}</span>
                               <span className="description">수비 <br/> 성공률</span>
                           </div>
                       </div>
@@ -175,15 +175,15 @@ class Profile extends React.Component {
                                           <span className="description">카드</span>
                                       </div>
                                       <div>
-                                          <span className="heading">89</span>
+                                          <span className="heading">{this.state.matchResult[0].matchInfo[1].pass.passSuccess} / {this.state.matchResult[0].matchInfo[1].pass.passTry}</span>
                                           <span className="description">패스 <br/> 성공률</span>
                                       </div>
                                       <div>
-                                          <span className="heading">89</span>
+                                          <span className="heading">{this.state.matchResult[0].matchInfo[1].shoot.effectiveShootTotal} / {this.state.matchResult[0].matchInfo[1].shoot.shootTotal}</span>
                                           <span className="description">슛 <br/> 성공률</span>
                                       </div>
                                       <div>
-                                          <span className="heading">89</span>
+                                          <span className="heading">{this.state.matchResult[0].matchInfo[1].defence.blockSuccess} / {this.state.matchResult[0].matchInfo[1].defence.blockTry}</span>
                                           <span className="description">수비 <br/> 성공률</span>
                                       </div>
                                   </div>
@@ -198,92 +198,51 @@ class Profile extends React.Component {
               </Col>
           </Row>
             <br/>
-
         </Container>
           <Container>
-              <Col className="order-xl-1" xl="12">
-                  <Card className="bg-secondary shadow">
-                      <CardHeader className="bg-white border-0">
-                          <Row className="align-items-center">
-                              <Col xs="8">
-                                  <h3 className="mb-0">My account</h3>
-                              </Col>
-                              <Col className="text-right" xs="4">
-                                  <Button
-                                      color="primary"
-                                      href="#pablo"
-                                      onClick={e => e.preventDefault()}
-                                      size="sm"
-                                  >
-                                      Settings
-                                  </Button>
-                              </Col>
-                          </Row>
-                      </CardHeader>
-                      <CardBody>
-                          <Form>
-                              <h6 className="heading-small text-muted mb-4">
-                                  User information
-                              </h6>
-                              <div className="pl-lg-4">
-                                  <Row>
-                                      <Col lg="6">
-                                          <FormGroup>
-                                              <label
-                                                  className="form-control-label"
-                                                  htmlFor="input-username"
-                                              >
-                                                  Username
-                                              </label>
-                                              <Input
-                                                  className="form-control-alternative"
-                                                  defaultValue={this.state.nickname}
-                                                  id="input-username"
-                                                  placeholder="Username"
-                                                  type="text"
-                                              />
-                                          </FormGroup>
-                                      </Col>
-                                      <Col lg="6">
-                                          <FormGroup>
-                                              <label
-                                                  className="form-control-label"
-                                                  htmlFor="input-email"
-                                              >
-                                                  Email address
-                                              </label>
-                                              <Input
-                                                  className="form-control-alternative"
-                                                  id="input-email"
-                                                  placeholder="email@email.com"
-                                                  type="email"
-                                              />
-                                          </FormGroup>
-                                      </Col>
-                                  </Row>
-                              </div>
-                              <div className="pl-lg-4">
-                              </div>
-                              <hr className="my-4" />
-                              Description
-                              <h6 className="heading-small text-muted mb-4">About me</h6>
-                              <div className="pl-lg-4">
-                                  <FormGroup>
-                                      <label>About Me</label>
-                                      <Input
-                                          className="form-control-alternative"
-                                          placeholder=""
-                                          rows="4"
-                                          defaultValue=""
-                                          type="textarea"
-                                      />
-                                  </FormGroup>
-                              </div>
-                          </Form>
-                      </CardBody>
-                  </Card>
-              </Col>
-          </Container>
+          <Col className="order-xl-1" xl="12">
+              <Card className="bg-secondary shadow">
+                  <CardHeader className="bg-white border-0">
+                      <Row className="align-items-center">
+                          <Col xs="4">
+                              <h3 className="mb-0">선수 명단</h3>
+                          </Col>
+                      </Row>
+                  </CardHeader>
+                  <CardBody>
+                      <Form>
+                          <h6 className="heading-small text-muted mb-4">
+                              User information
+                          </h6>
+                          <div className="pl-lg-4">
+                              <Row>
+                                  <Col lg="6">
+                                      <FormGroup>
+                                          <label
+                                              className="form-control-label"
+                                              htmlFor="input-username"
+                                          >
+                                              Username
+                                          </label>
+                                          <Input
+                                              className="form-control-alternative"
+                                              defaultValue={this.state.nickname}
+                                              id="input-username"
+                                              placeholder="Username"
+                                              type="text"
+                                          />
+                                      </FormGroup>
+                                  </Col>
+                              </Row>
+                          </div>
+                          <div className="pl-lg-4">
+                          </div>
+                          <hr className="my-4" />
+                      </Form>
+                  </CardBody>
+              </Card>
+          </Col>
+      </Container>
       </>
     );
   }
