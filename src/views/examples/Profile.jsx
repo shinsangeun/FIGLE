@@ -25,12 +25,14 @@ class Profile extends React.Component {
           accessId:'',    //아이디 시리얼 넘버
           level:0,        //레벨
           matchResult: '',
-          isLoading: true
+          isLoading: true,
+          playerList: ''
       };
   }
 
   componentDidMount = async () => {
       await this.getMatchIdDatail();
+      await this.getPlayerList();
   };
 
   getMatchIdDatail(){
@@ -57,13 +59,37 @@ class Profile extends React.Component {
     }
   }
 
+  getPlayerList(){
+      const url = 'https://static.api.nexon.co.kr/fifaonline4/latest/spid.json';
+      try{
+          axios.get(url, {
+              headers: {'Access-Control-Allow-Origin': '*' }
+          }).then(response => {
+              console.log("length:", response);
+
+              for(let i = 0; i<response.length; i++){
+                  if(this.state.matchResult[i].matchInfo[0].player[0].spId == response[i].spId){
+                      console.log("response[i].spId:", response[i].spId);
+                      this.setState({
+                          playerList: response
+                      })
+                  }else{
+                      return;
+                  }
+              }
+          })
+      }catch(error){
+          console.error(error);
+      }
+  }
+
   render() {
     const {matchResult, isLoading} = this.state;
 
     if(!isLoading){
         console.log("res:", matchResult[0].matchInfo[0].nickname);
         console.log(this.state.matchResult[0].matchInfo[0].nickname);
-        console.log("test:", this.state.matchResult[0].matchInfo[0].matchDetail.possession)
+        console.log("test:", this.state.matchResult[0].matchInfo[0].player[0].spId)
     }
 
     return (
@@ -130,6 +156,15 @@ class Profile extends React.Component {
                   <div className="text-center">
                     <h3>{this.state.matchResult[0].matchInfo[0].nickname}</h3>
                   </div>
+                    <div class="avatar-group">
+                        <a className="avatar avatar-sm" href="#pablo" id="tooltip742438047">
+                            <img className="rounded-circle" src={require("assets/img/theme/profile.png")}></img></a>
+                        <a className="avatar avatar-sm" href="#pablo" id="tooltip742438047">
+                            <img className="rounded-circle" src={require("assets/img/theme/profile.png")}></img></a>
+                        <a className="avatar avatar-sm" href="#pablo" id="tooltip742438047">
+                            <img className="rounded-circle" src={require("assets/img/theme/profile.png")}></img></a>
+
+                    </div>
                 </CardBody>
                   )}
               </Card>
@@ -212,26 +247,121 @@ class Profile extends React.Component {
                   <CardBody>
                       <Form>
                           <h6 className="heading-small text-muted mb-4">
-                              User information
+                              선수 명단
                           </h6>
                           <div className="pl-lg-4">
                               <Row>
                                   <Col lg="6">
+                                      {isLoading ? (
+                                          <div className="loader">
+                                              <span className="loader__text">Loading...</span>
+                                          </div>
+                                      ) : (
+                                         /* {matchResult.map((index, matchId) => (*/
                                       <FormGroup>
-                                          <label
-                                              className="form-control-label"
-                                              htmlFor="input-username"
-                                          >
-                                              Username
-                                          </label>
-                                          <Input
-                                              className="form-control-alternative"
-                                              defaultValue={this.state.nickname}
-                                              id="input-username"
-                                              placeholder="Username"
-                                              type="text"
-                                          />
+                                          <tr>
+                                              {this.state.matchResult[0].matchInfo[0].player[0].spId}
+                                          </tr>
+                                          <tr>
+                                            {this.state.matchResult[0].matchInfo[0].player[1].spId}
+                                          </tr>
+                                          <tr>
+                                            {this.state.matchResult[0].matchInfo[0].player[2].spId}
+                                          </tr>
+                                          <tr>
+                                             {this.state.matchResult[0].matchInfo[0].player[3].spId}
+                                          </tr>
+                                          <tr>
+                                              {this.state.matchResult[0].matchInfo[0].player[3].spId}
+                                          </tr>
+                                          <tr>
+                                              {this.state.matchResult[0].matchInfo[0].player[4].spId}
+                                          </tr>
+                                          <tr>
+                                              {this.state.matchResult[0].matchInfo[0].player[5].spId}
+                                          </tr>
+                                          <tr>
+                                              {this.state.matchResult[0].matchInfo[0].player[6].spId}
+                                          </tr>
+                                          <tr>
+                                              {this.state.matchResult[0].matchInfo[0].player[7].spId}
+                                          </tr>
+                                          <tr>
+                                              {this.state.matchResult[0].matchInfo[0].player[8].spId}
+                                          </tr>
+                                          <tr>
+                                              {this.state.matchResult[0].matchInfo[0].player[9].spId}
+                                          </tr>
+                                          <tr>
+                                              {this.state.matchResult[0].matchInfo[0].player[10].spId}
+                                          </tr>
+                                          <tr>
+                                              {this.state.matchResult[0].matchInfo[0].player[11].spId}
+                                          </tr>
+                                          <tr>
+                                              {this.state.matchResult[0].matchInfo[0].player[12].spId}
+                                          </tr>
                                       </FormGroup>
+                                           /*   ))}*/
+                                      )}
+                                  </Col>
+                              </Row>
+                          </div>
+                          <div className="pl-lg-4">
+                              <Row>
+                                  <Col lg="6">
+                                      {isLoading ? (
+                                          <div className="loader">
+                                              <span className="loader__text">Loading...</span>
+                                          </div>
+                                      ) : (
+                                          /* {matchResult.map((index, matchId) => (*/
+                                          <FormGroup>
+                                              <tr>
+                                                  {this.state.matchResult[0].matchInfo[1].player[0].spId}
+                                              </tr>
+                                              <tr>
+                                                  {this.state.matchResult[0].matchInfo[1].player[1].spId}
+                                              </tr>
+                                              <tr>
+                                                  {this.state.matchResult[0].matchInfo[1].player[2].spId}
+                                              </tr>
+                                              <tr>
+                                                  {this.state.matchResult[0].matchInfo[1].player[3].spId}
+                                              </tr>
+                                              <tr>
+                                                  {this.state.matchResult[0].matchInfo[1].player[3].spId}
+                                              </tr>
+                                              <tr>
+                                                  {this.state.matchResult[0].matchInfo[1].player[4].spId}
+                                              </tr>
+                                              <tr>
+                                                  {this.state.matchResult[0].matchInfo[1].player[5].spId}
+                                              </tr>
+                                              <tr>
+                                                  {this.state.matchResult[0].matchInfo[1].player[6].spId}
+                                              </tr>
+                                              <tr>
+                                                  {this.state.matchResult[0].matchInfo[1].player[7].spId}
+                                              </tr>
+                                              <tr>
+                                                  {this.state.matchResult[0].matchInfo[1].player[8].spId}
+                                              </tr>
+                                              <tr>
+                                                  {this.state.matchResult[0].matchInfo[1].player[9].spId}
+                                              </tr>
+                                              <tr>
+                                                  {this.state.matchResult[0].matchInfo[1].player[10].spId}
+                                              </tr>
+                                              <tr>
+                                                  {this.state.matchResult[0].matchInfo[1].player[11].spId}
+                                              </tr>
+                                              <tr>
+                                                  {this.state.matchResult[0].matchInfo[1].player[12].spId}
+                                              </tr>
+                                          </FormGroup>
+                                          /*   ))}*/
+                                      )}
                                   </Col>
                               </Row>
                           </div>
