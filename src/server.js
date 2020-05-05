@@ -4,9 +4,10 @@ var cors = require('cors');
 var app = express();
 var mysql = require('mysql');
 var connection = mysql.createConnection({
-	host     : '127.0.0.1',
+	host     : 'localhost',
 	user     : 'root',
-	password : 'ssee',
+	password : 'password',
+    port : 3306,
 	database : 'figle'
 });
 
@@ -14,7 +15,10 @@ connection.connect();
 
 connection.query('SELECT * FROM player', (err, row, fields) => {
 	if(err) throw err;
-	console.log("row:",row, row.length)
+	console.log("row:", row.length);
+	if(row.length == 0){
+	    // 선수 list json 데이터 insert
+    }
 });
 
 connection.end();
