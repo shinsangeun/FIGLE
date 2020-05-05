@@ -1,5 +1,6 @@
 import React from "react";
 import axios from "axios";
+import Player from './Player';
 
 // reactstrap components
 import {
@@ -48,7 +49,7 @@ class Profile extends React.Component {
         headers: {Authorization: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2NvdW50X2lkIjoiMTIyNDc2MTUyOSIsImF1dGhfaWQiOiIyIiwidG9rZW5fdHlwZSI6IkFjY2Vzc1Rva2VuIiwic2VydmljZV9pZCI6IjQzMDAxMTQ4MSIsIlgtQXBwLVJhdGUtTGltaXQiOiIyMDAwMDoxMCIsIm5iZiI6MTU3NzAwODc3MywiZXhwIjoxNjQwMDgwNzczLCJpYXQiOjE1NzcwMDg3NzN9.Pv1OIow11dye_uv69wnVleR93fa4fDrmup1oTXVuUuo'}
       }).then(response => {
         matchResultArray.push(response.data);
-        console.log("matchResult:" , matchResultArray[0].matchInfo[0].matchDetail.possession)
+        console.log("matchResult:" , matchResultArray[0].matchInfo[0].matchDetail.possession);
         this.setState({
           matchResult: matchResultArray,
           isLoading: false
@@ -59,29 +60,24 @@ class Profile extends React.Component {
     }
   }
 
-  getPlayerList(){
-      const url = 'https://static.api.nexon.co.kr/fifaonline4/latest/spid.json';
-      try{
-          axios.get(url, {
-              headers: {'Access-Control-Allow-Origin': '*' }
-          }).then(response => {
-              console.log("length:", response);
-
-              for(let i = 0; i<response.length; i++){
-                  if(this.state.matchResult[i].matchInfo[0].player[0].spId == response[i].spId){
-                      console.log("response[i].spId:", response[i].spId);
-                      this.setState({
-                          playerList: response
-                      })
-                  }else{
-                      return;
-                  }
-              }
-          })
-      }catch(error){
-          console.error(error);
+  getPlayerList = async () => {
+      const url = '/fifaonline4/latest/spid.json';
+      const options = {
+          method: 'GET',
+          headers: {
+              "Access-Control-Allow-Origin": "*",
+              "Accept": "*/*",
+              "Host": "static.api.nexon.co.kr",
+              "Connection":"keep-alive"
+          }
+      };
+      let response = await fetch(url, options);
+      let responseOK = response && response.ok;
+      if(responseOK){
+          let data = await response.json();
+          console.log("data:", data.length);
       }
-  }
+  };
 
   render() {
     const {matchResult, isLoading} = this.state;
