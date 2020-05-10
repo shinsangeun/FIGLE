@@ -33,15 +33,15 @@ class Auth extends React.Component {
       accessId:'',  //아이디 시리얼 넘버
       level:0,      //레벨
     };
+    //this.getUserId(this.state.nickname);
   }
 
   handleChange = (e) => {
-    // 페이지 리로딩 방지
-    e.preventDefault();
     this.setState({
       nickname: e.target.value
     });
-    this.getUserId(e.target.value);
+    console.log("e:", e.target.value);
+   // this.getUserId(e.target.value);
   };
 
   async getUserId(nickname){
@@ -50,22 +50,20 @@ class Auth extends React.Component {
       return await axios.get(req_message, {
         // 헤더 값 : 권한 시리얼 정보
         headers : { Authorization : 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2NvdW50X2lkIjoiMTIyNDc2MTUyOSIsImF1dGhfaWQiOiIyIiwidG9rZW5fdHlwZSI6IkFjY2Vzc1Rva2VuIiwic2VydmljZV9pZCI6IjQzMDAxMTQ4MSIsIlgtQXBwLVJhdGUtTGltaXQiOiIyMDAwMDoxMCIsIm5iZiI6MTU3NzAwODc3MywiZXhwIjoxNjQwMDgwNzczLCJpYXQiOjE1NzcwMDg3NzN9.Pv1OIow11dye_uv69wnVleR93fa4fDrmup1oTXVuUuo'}
+
       }).then(response => {
         console.log("code:", response.status);
-        console.log("accessId: ", response.accessId);
-
-        if(response.accessId == undefined){
-          alert("해당 닉네임의 유저가 없습니다.")
-        }else{
+        console.log("message: ", response);
           this.setState({
             nickname : response.data.nickname,
             accessId : response.data.accessId,
             level : response.data.level
           })
-        }
       })
     }catch (error){
-      console.error(error);
+      if(error.response.status === 404){
+        alert("해당 닉네임의 유저가 없습니다.")
+      }
     }
   };
 
@@ -74,7 +72,7 @@ class Auth extends React.Component {
       <>
         <div className="main-content">
           <AuthNavbar />
-          <div className="header bg-gradient-info py-7 py-lg-8">
+          <div className="header bg-gradient-default py-10 py-lg-8">
             <Container>
               <div className="header-body text-center mb-7">
                 <Row className="justify-content-center">
@@ -88,20 +86,22 @@ class Auth extends React.Component {
               </div>
             </Container>
 
+            <Container>
               <form className="navbar-search navbar-search-dark">
-                  <div className="mb-0 form-group">
-                      <div className="input-group-alternative input-group">
-                          <div className="input-group-prepend"><span className="input-group-text">
-                              <i className="fas fa-search" ></i></span></div>
-                          <input placeholder="Search" type="text" className="form-control"
-                                 name="nickname"
-                                 value={this.state.nickname}
-                                 onChange={this.handleChange}
-                          ></input>
-                        <Button type="submit" href={`/admin/tables/users?accessId=${this.state.accessId}`}>검색</Button>
-                      </div>
+                <div className="mb-0 form-group">
+                  <div className="input-group-alternative input-group">
+                    <div className="input-group-prepend"><span className="input-group-text">
+                            <i className="fas fa-search" ></i></span></div>
+                    <input placeholder="Search" type="text" className="form-control"
+                           name="nickname"
+                           value={this.state.nickname}
+                           onChange={this.handleChange}
+                    ></input>
+                    <Button onClick={this.getUserId(this.state.nickname)} type="submit" href={`/admin/tables/users?accessId=${this.state.accessId}`}>검색</Button>
                   </div>
+                </div>
               </form>
+            </Container>
             <div className="separator separator-bottom separator-skew zindex-100">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -120,7 +120,7 @@ class Auth extends React.Component {
           </div>
           {/* Page content */}
           <Container className="mt--100 pb-9">
-            <Row className="justify-content-center row">
+            <Row className="justify-content-row">
               <Switch>{this.getRoutes(routes)}</Switch>
             </Row>
           </Container>

@@ -24,10 +24,11 @@ class Profile extends React.Component {
       this.state ={
           nickname:'',    //닉네임
           accessId:'',    //아이디 시리얼 넘버
-          level:0,        //레벨
           matchResult: '',
           isLoading: true,
-          playerList: ''
+          playerList: '',
+          id:'',
+          name:''
       };
   }
 
@@ -75,7 +76,9 @@ class Profile extends React.Component {
       let responseOK = response && response.ok;
       if(responseOK){
           let data = await response.json();
-          console.log("data:", data.length);
+          this.setState({
+              playerList: data
+          });
       }
   };
 
@@ -85,7 +88,13 @@ class Profile extends React.Component {
     if(!isLoading){
         console.log("res:", matchResult[0].matchInfo[0].nickname);
         console.log(this.state.matchResult[0].matchInfo[0].nickname);
-        console.log("test:", this.state.matchResult[0].matchInfo[0].player[0].spId)
+        console.log("test:", this.state.matchResult[0].matchInfo[0].player[0].spId, this.state.playerList);
+
+        if(this.state.playerList.indexOf(this.state.matchResult[0].matchInfo[0].player[0].spId) != -1){
+            console.log("spId match::", this.state.matchResult[0].matchInfo[0].player[0].spId);
+        }else{
+            console.log("No match data.");
+        }
     }
 
     return (

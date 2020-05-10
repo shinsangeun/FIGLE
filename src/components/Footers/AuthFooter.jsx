@@ -1,7 +1,7 @@
 import React from "react";
 
 // reactstrap components
-import {NavItem, NavLink, Nav, Container, Row, Col, Button} from "reactstrap";
+import {NavItem, NavLink, Nav, Container, Row, Col} from "reactstrap";
 
 class Login extends React.Component {
   render() {
@@ -18,19 +18,22 @@ class Login extends React.Component {
               </Col>
               <Col xl="6">
                 <Nav className="nav-footer justify-content-center justify-content-xl-end">
-                  <Button
-                      className="btn-neutral btn-icon"
-                      color="default"
-                      href="https://github.com/gksthf2271/FIGLE/"
-                  >
-                  <span className="btn-inner--icon">
-                    <img
-                        alt="..."
-                        src={require("assets/img/icons/common/github.svg")}
-                    />
-                  </span>
-                    <span className="btn-inner--text">Github</span>
-                  </Button>
+                  <NavItem>
+                    <NavLink
+                        href="https://github.com/gksthf2271/FIGLE/"
+                        target="_blank"
+                    >
+                      Github
+                    </NavLink>
+                  </NavItem>
+                  <NavItem>
+                    <NavLink
+                        href="https://github.com/creativetimofficial/argon-dashboard/blob/master/LICENSE.md?ref=adr-auth-footer"
+                        target="_blank"
+                    >
+                      MIT License
+                    </NavLink>
+                  </NavItem>
                 </Nav>
               </Col>
             </Row>
