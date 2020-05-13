@@ -161,15 +161,6 @@ class Profile extends React.Component {
                   <div className="text-center">
                     <h3>{this.state.matchResult[0].matchInfo[0].nickname}</h3>
                   </div>
-                    <div class="avatar-group">
-                        <a className="avatar avatar-sm" href="#pablo" id="tooltip742438047">
-                            <img className="rounded-circle" src={require("assets/img/theme/profile.png")}></img></a>
-                        <a className="avatar avatar-sm" href="#pablo" id="tooltip742438047">
-                            <img className="rounded-circle" src={require("assets/img/theme/profile.png")}></img></a>
-                        <a className="avatar avatar-sm" href="#pablo" id="tooltip742438047">
-                            <img className="rounded-circle" src={require("assets/img/theme/profile.png")}></img></a>
-
-                    </div>
                 </CardBody>
                   )}
               </Card>
