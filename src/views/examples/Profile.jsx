@@ -1,6 +1,5 @@
 import React from "react";
 import axios from "axios";
-import Player from './Player';
 
 // reactstrap components
 import {
@@ -28,7 +27,8 @@ class Profile extends React.Component {
           isLoading: true,
           playerList: '',
           id:'',
-          name:''
+          leftPlayerListName:'',     // 왼쪽 팀 선수 리스트
+          rightPlayerListName:''     // 오른쪽 팀 선수 리스트
       };
   }
 
@@ -43,9 +43,10 @@ class Profile extends React.Component {
     const MatchId = params.get("matchId");
     let matchResultArray = [];
 
+    const proxyurl = "https://cors-anywhere.herokuapp.com/";
     let getMatchIdDetail = 'https://api.nexon.co.kr/fifaonline4/v1.0/matches/' + MatchId;
     try{
-      axios.get(getMatchIdDetail, {
+      axios.get(proxyurl + getMatchIdDetail, {
         // 헤더 값 : 권한 시리얼 정보
         headers: {Authorization: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2NvdW50X2lkIjoiMTIyNDc2MTUyOSIsImF1dGhfaWQiOiIyIiwidG9rZW5fdHlwZSI6IkFjY2Vzc1Rva2VuIiwic2VydmljZV9pZCI6IjQzMDAxMTQ4MSIsIlgtQXBwLVJhdGUtTGltaXQiOiIyMDAwMDoxMCIsIm5iZiI6MTU3NzAwODc3MywiZXhwIjoxNjQwMDgwNzczLCJpYXQiOjE1NzcwMDg3NzN9.Pv1OIow11dye_uv69wnVleR93fa4fDrmup1oTXVuUuo'}
       }).then(response => {
@@ -86,14 +87,53 @@ class Profile extends React.Component {
     const {matchResult, isLoading} = this.state;
 
     if(!isLoading){
-        console.log("res:", matchResult[0].matchInfo[0].nickname);
-        console.log(this.state.matchResult[0].matchInfo[0].nickname);
-        console.log("test:", this.state.matchResult[0].matchInfo[0].player[0].spId, this.state.playerList);
+        console.log("res:", matchResult[0].matchInfo[0].nickname, this.state.matchResult[0].matchInfo[0].nickname);
+        console.log("player list:", this.state.matchResult[0].matchInfo[0].player[0].spId);
+        // console.log("전체 player list:",  this.state.playerList);
 
-        if(this.state.playerList.indexOf(this.state.matchResult[0].matchInfo[0].player[0].spId) != -1){
-            console.log("spId match::", this.state.matchResult[0].matchInfo[0].player[0].spId);
-        }else{
-            console.log("No match data.");
+        let playerId = this.state.playerList.map(player => player.id);
+        let playerIdList = [];
+
+        //  왼쪽 팀 선수 리스트
+        for(let i = 0; i < this.state.matchResult[0].matchInfo[0].player.length; i++){
+            if(playerId.indexOf(this.state.matchResult[0].matchInfo[0].player[i].spId) !== -1){
+                console.log("spId match::", this.state.matchResult[0].matchInfo[0].player[i].spId);
+            }else{
+                console.log("No match data.");
+            }
+            playerIdList.push(this.state.matchResult[0].matchInfo[0].player[i].spId);
+            console.log("playerIdList: ", playerIdList);
+
+            let leftResult = this.state.playerList.filter((element) => {
+                for(let i = 0; i < playerIdList.length; i++){
+                    if(element.id === playerIdList[i]){
+                        return element.name;
+                    }
+                }
+            })
+            console.log("leftResult-->", leftResult);
+            this.state.leftPlayerListName = leftResult;
+        }
+
+        //  오른쪽 팀 선수 리스트
+        for(let i = 0; i < this.state.matchResult[0].matchInfo[1].player.length; i++){
+            if(playerId.indexOf(this.state.matchResult[0].matchInfo[1].player[i].spId) !== -1){
+                console.log("spId match::", this.state.matchResult[0].matchInfo[1].player[i].spId);
+            }else{
+                console.log("No match data.");
+            }
+            playerIdList.push(this.state.matchResult[0].matchInfo[1].player[i].spId);
+            console.log("playerIdList: ", playerIdList);
+
+            let rightResult = this.state.playerList.filter((element) => {
+                for(let i = 0; i < playerIdList.length; i++){
+                    if(element.id === playerIdList[i]){
+                        return element.name;
+                    }
+                }
+            })
+            console.log("rightResult-->", rightResult);
+            this.state.rightPlayerListName = rightResult;
         }
     }
 
@@ -253,52 +293,28 @@ class Profile extends React.Component {
                                               <span className="loader__text">Loading...</span>
                                           </div>
                                       ) : (
-                                         /* {matchResult.map((index, matchId) => (*/
+                                          /*{result.map((index, matchId) => (*/
                                       <FormGroup>
-                                          <tr>
-                                              {this.state.matchResult[0].matchInfo[0].player[0].spId}
-                                          </tr>
-                                          <tr>
-                                            {this.state.matchResult[0].matchInfo[0].player[1].spId}
-                                          </tr>
-                                          <tr>
-                                            {this.state.matchResult[0].matchInfo[0].player[2].spId}
-                                          </tr>
-                                          <tr>
-                                             {this.state.matchResult[0].matchInfo[0].player[3].spId}
-                                          </tr>
-                                          <tr>
-                                              {this.state.matchResult[0].matchInfo[0].player[3].spId}
-                                          </tr>
-                                          <tr>
-                                              {this.state.matchResult[0].matchInfo[0].player[4].spId}
-                                          </tr>
-                                          <tr>
-                                              {this.state.matchResult[0].matchInfo[0].player[5].spId}
-                                          </tr>
-                                          <tr>
-                                              {this.state.matchResult[0].matchInfo[0].player[6].spId}
-                                          </tr>
-                                          <tr>
-                                              {this.state.matchResult[0].matchInfo[0].player[7].spId}
-                                          </tr>
-                                          <tr>
-                                              {this.state.matchResult[0].matchInfo[0].player[8].spId}
-                                          </tr>
-                                          <tr>
-                                              {this.state.matchResult[0].matchInfo[0].player[9].spId}
-                                          </tr>
-                                          <tr>
-                                              {this.state.matchResult[0].matchInfo[0].player[10].spId}
-                                          </tr>
-                                          <tr>
-                                              {this.state.matchResult[0].matchInfo[0].player[11].spId}
-                                          </tr>
-                                          <tr>
-                                              {this.state.matchResult[0].matchInfo[0].player[12].spId}
-                                          </tr>
+                                          {this.state.leftPlayerListName[0].name} <br/>
+                                          {this.state.leftPlayerListName[1].name} <br/>
+                                          {this.state.leftPlayerListName[2].name} <br/>
+                                          {this.state.leftPlayerListName[3].name} <br/>
+                                          {this.state.leftPlayerListName[4].name} <br/>
+                                          {this.state.leftPlayerListName[5].name} <br/>
+                                          {this.state.leftPlayerListName[6].name} <br/>
+                                          {this.state.leftPlayerListName[7].name} <br/>
+                                          {this.state.leftPlayerListName[8].name} <br/>
+                                          {this.state.leftPlayerListName[9].name} <br/>
+                                          {this.state.leftPlayerListName[10].name} <br/>
+                                          {this.state.leftPlayerListName[11].name} <br/>
+                                          {this.state.leftPlayerListName[12].name} <br/>
+                                          {this.state.leftPlayerListName[13].name} <br/>
+                                          {this.state.leftPlayerListName[14].name} <br/>
+                                          {this.state.leftPlayerListName[15].name} <br/>
+                                          {this.state.leftPlayerListName[16].name} <br/>
+                                          {this.state.leftPlayerListName[17].name} <br/>
                                       </FormGroup>
-                                           /*   ))}*/
+                                              /*))}*/
                                       )}
                                   </Col>
                               </Row>
@@ -311,52 +327,30 @@ class Profile extends React.Component {
                                               <span className="loader__text">Loading...</span>
                                           </div>
                                       ) : (
-                                          /* {matchResult.map((index, matchId) => (*/
+                                           /*{rightPlayerListName.map((index, matchId) => (*/
                                           <FormGroup>
-                                              <tr>
-                                                  {this.state.matchResult[0].matchInfo[1].player[0].spId}
-                                              </tr>
-                                              <tr>
-                                                  {this.state.matchResult[0].matchInfo[1].player[1].spId}
-                                              </tr>
-                                              <tr>
-                                                  {this.state.matchResult[0].matchInfo[1].player[2].spId}
-                                              </tr>
-                                              <tr>
-                                                  {this.state.matchResult[0].matchInfo[1].player[3].spId}
-                                              </tr>
-                                              <tr>
-                                                  {this.state.matchResult[0].matchInfo[1].player[3].spId}
-                                              </tr>
-                                              <tr>
-                                                  {this.state.matchResult[0].matchInfo[1].player[4].spId}
-                                              </tr>
-                                              <tr>
-                                                  {this.state.matchResult[0].matchInfo[1].player[5].spId}
-                                              </tr>
-                                              <tr>
-                                                  {this.state.matchResult[0].matchInfo[1].player[6].spId}
-                                              </tr>
-                                              <tr>
-                                                  {this.state.matchResult[0].matchInfo[1].player[7].spId}
-                                              </tr>
-                                              <tr>
-                                                  {this.state.matchResult[0].matchInfo[1].player[8].spId}
-                                              </tr>
-                                              <tr>
-                                                  {this.state.matchResult[0].matchInfo[1].player[9].spId}
-                                              </tr>
-                                              <tr>
-                                                  {this.state.matchResult[0].matchInfo[1].player[10].spId}
-                                              </tr>
-                                              <tr>
-                                                  {this.state.matchResult[0].matchInfo[1].player[11].spId}
-                                              </tr>
-                                              <tr>
-                                                  {this.state.matchResult[0].matchInfo[1].player[12].spId}
-                                              </tr>
+                                             {/* {this.state.matchResult[0].matchInfo[1].player[index].spId}*/}
+                                              {this.state.rightPlayerListName[index].name} <br/>
+                                              {this.state.rightPlayerListName[0].name} <br/>
+                                              {this.state.rightPlayerListName[1].name} <br/>
+                                              {this.state.rightPlayerListName[2].name} <br/>
+                                              {this.state.rightPlayerListName[3].name} <br/>
+                                              {this.state.rightPlayerListName[4].name} <br/>
+                                              {this.state.rightPlayerListName[5].name} <br/>
+                                              {this.state.rightPlayerListName[6].name} <br/>
+                                              {this.state.rightPlayerListName[7].name} <br/>
+                                              {this.state.rightPlayerListName[8].name} <br/>
+                                              {this.state.rightPlayerListName[9].name} <br/>
+                                              {this.state.rightPlayerListName[10].name} <br/>
+                                              {this.state.rightPlayerListName[11].name} <br/>
+                                              {this.state.rightPlayerListName[12].name} <br/>
+                                              {this.state.rightPlayerListName[13].name} <br/>
+                                              {this.state.rightPlayerListName[14].name} <br/>
+                                              {this.state.rightPlayerListName[15].name} <br/>
+                                              {this.state.rightPlayerListName[16].name} <br/>
+                                              {this.state.rightPlayerListName[17].name} <br/>
                                           </FormGroup>
-                                          /*   ))}*/
+                                             /*))}*/
                                       )}
                                   </Col>
                               </Row>
