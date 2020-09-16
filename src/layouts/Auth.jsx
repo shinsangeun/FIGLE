@@ -46,7 +46,6 @@ class Auth extends React.Component {
 
    async getUserId(nickname){
     console.log("nickname:", nickname);
-    console.log("유저아이디")
 
     const proxyurl = "https://cors-anywhere.herokuapp.com/";
     let req_message = 'https://api.nexon.co.kr/fifaonline4/v1.0/users?nickname=' + nickname;

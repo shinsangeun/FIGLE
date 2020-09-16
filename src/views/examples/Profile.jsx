@@ -28,7 +28,8 @@ class Profile extends React.Component {
           playerList: '',
           id:'',
           leftPlayerListName:'',     // 왼쪽 팀 선수 리스트
-          rightPlayerListName:''     // 오른쪽 팀 선수 리스트
+          rightPlayerListName:'',     // 오른쪽 팀 선수 리스트
+          playerImage:''               // 선수 이미지
       };
   }
 
@@ -42,6 +43,8 @@ class Profile extends React.Component {
     const params = new URLSearchParams(search);
     const MatchId = params.get("matchId");
     let matchResultArray = [];
+
+    console.log("MatchId:", MatchId);
 
     const proxyurl = "https://cors-anywhere.herokuapp.com/";
     let getMatchIdDetail = 'https://api.nexon.co.kr/fifaonline4/v1.0/matches/' + MatchId;
@@ -92,7 +95,8 @@ class Profile extends React.Component {
         // console.log("전체 player list:",  this.state.playerList);
 
         let playerId = this.state.playerList.map(player => player.id);
-        let playerIdList = [];
+        let leftPlayerIdList = [];
+        let rightPlayerIdList = [];
 
         //  왼쪽 팀 선수 리스트
         for(let i = 0; i < this.state.matchResult[0].matchInfo[0].player.length; i++){
@@ -101,12 +105,12 @@ class Profile extends React.Component {
             }else{
                 console.log("No match data.");
             }
-            playerIdList.push(this.state.matchResult[0].matchInfo[0].player[i].spId);
-            console.log("playerIdList: ", playerIdList);
+            leftPlayerIdList.push(this.state.matchResult[0].matchInfo[0].player[i].spId);
+            console.log("leftPlayerIdList: ", leftPlayerIdList);
 
             let leftResult = this.state.playerList.filter((element) => {
-                for(let i = 0; i < playerIdList.length; i++){
-                    if(element.id === playerIdList[i]){
+                for(let i = 0; i < leftPlayerIdList.length; i++){
+                    if(element.id === leftPlayerIdList[i]){
                         return element.name;
                     }
                 }
@@ -122,18 +126,42 @@ class Profile extends React.Component {
             }else{
                 console.log("No match data.");
             }
-            playerIdList.push(this.state.matchResult[0].matchInfo[1].player[i].spId);
-            console.log("playerIdList: ", playerIdList);
+            rightPlayerIdList.push(this.state.matchResult[0].matchInfo[1].player[i].spId);
+            console.log("rightPlayerIdList: ", rightPlayerIdList);
 
             let rightResult = this.state.playerList.filter((element) => {
-                for(let i = 0; i < playerIdList.length; i++){
-                    if(element.id === playerIdList[i]){
+                for(let i = 0; i < rightPlayerIdList.length; i++){
+                    if(element.id === rightPlayerIdList[i]){
                         return element.name;
                     }
                 }
             })
             console.log("rightResult-->", rightResult);
             this.state.rightPlayerListName = rightResult;
+
+            // 선수 이미지 조회
+            for(let i = 0; i < rightResult.length; i++){
+                const proxyurl = "https://cors-anywhere.herokuapp.com/";
+                let url = 'https://fo4.dn.nexoncdn.co.kr/live/externalAssets/common/players/p' + rightPlayerIdList[i] + '.png';
+                console.log("아이디:", rightPlayerIdList[i])
+                try{
+                    axios.get(proxyurl + url, {
+                        headers: {
+                            "X-Requested-With": "XMLHttpRequest"
+                        }
+                    }).then(response => {
+                        console.log("axios 실행1", response);
+                        let images = [];
+                        images.push(response);
+
+                        this.setState({
+                            playerImage: images
+                        })
+                    })
+                }catch(error){
+                    console.log("에러:", error);
+                }
+            }
         }
     }
 
@@ -293,9 +321,12 @@ class Profile extends React.Component {
                                               <span className="loader__text">Loading...</span>
                                           </div>
                                       ) : (
+                                          //TODO map 루프 함수로 수정 필요
                                           /*{result.map((index, matchId) => (*/
                                       <FormGroup>
+                                          {this.state.playerImage[0]} <br/>
                                           {this.state.leftPlayerListName[0].name} <br/>
+                                          {this.state.playerImage[1]} <br/>
                                           {this.state.leftPlayerListName[1].name} <br/>
                                           {this.state.leftPlayerListName[2].name} <br/>
                                           {this.state.leftPlayerListName[3].name} <br/>
@@ -327,10 +358,10 @@ class Profile extends React.Component {
                                               <span className="loader__text">Loading...</span>
                                           </div>
                                       ) : (
+                                          //TODO map 루프 함수로 수정 필요
                                            /*{rightPlayerListName.map((index, matchId) => (*/
                                           <FormGroup>
                                              {/* {this.state.matchResult[0].matchInfo[1].player[index].spId}*/}
-                                              {this.state.rightPlayerListName[index].name} <br/>
                                               {this.state.rightPlayerListName[0].name} <br/>
                                               {this.state.rightPlayerListName[1].name} <br/>
                                               {this.state.rightPlayerListName[2].name} <br/>
