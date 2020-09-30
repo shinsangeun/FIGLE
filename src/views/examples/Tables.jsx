@@ -156,6 +156,7 @@ class Tables extends React.Component {
                         ) : (
                   <tbody>
                   {matchResult.map((index, matchId) => (
+                      //TODO 검색한 아이디 왼쪽 정렬 수정 필요 (승/패/무)
                       <tr>
                         <th>
                         <Button color={this.handleButton(index.matchInfo[0].matchDetail.matchResult)}>

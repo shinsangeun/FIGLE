@@ -55,7 +55,6 @@ class Profile extends React.Component {
         headers: {Authorization: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2NvdW50X2lkIjoiMTIyNDc2MTUyOSIsImF1dGhfaWQiOiIyIiwidG9rZW5fdHlwZSI6IkFjY2Vzc1Rva2VuIiwic2VydmljZV9pZCI6IjQzMDAxMTQ4MSIsIlgtQXBwLVJhdGUtTGltaXQiOiIyMDAwMDoxMCIsIm5iZiI6MTU3NzAwODc3MywiZXhwIjoxNjQwMDgwNzczLCJpYXQiOjE1NzcwMDg3NzN9.Pv1OIow11dye_uv69wnVleR93fa4fDrmup1oTXVuUuo'}
       }).then(response => {
         matchResultArray.push(response.data);
-        console.log("matchResult:" , matchResultArray[0].matchInfo[0].matchDetail.possession);
         this.setState({
           matchResult: matchResultArray,
           isLoading: false
@@ -85,16 +84,12 @@ class Profile extends React.Component {
               playerList: data
           });
       }
-  };
+  }
 
   render() {
     const {matchResult, isLoading} = this.state;
 
     if(!isLoading){
-        console.log("res:", matchResult[0].matchInfo[0].nickname, this.state.matchResult[0].matchInfo[0].nickname);
-        console.log("player list:", this.state.matchResult[0].matchInfo[0].player[0].spId);
-        // console.log("전체 player list:",  this.state.playerList);
-
         let playerId = this.state.playerList.map(player => player.id);
         let leftPlayerIdList = [];
         let rightPlayerIdList = [];
@@ -102,7 +97,7 @@ class Profile extends React.Component {
         //  왼쪽 팀 선수 리스트
         for(let i = 0; i < this.state.matchResult[0].matchInfo[0].player.length; i++){
             if(playerId.indexOf(this.state.matchResult[0].matchInfo[0].player[i].spId) !== -1){
-                console.log("spId match::", this.state.matchResult[0].matchInfo[0].player[i].spId);
+                console.log("spId match:", this.state.matchResult[0].matchInfo[0].player[i].spId);
             }else{
                 console.log("No match data.");
             }
@@ -116,14 +111,23 @@ class Profile extends React.Component {
                     }
                 }
             })
-            console.log("leftResult-->", leftResult);
+
             this.state.leftPlayerListName = leftResult;
+
+            let leftPlayerImageUrlList = [];
+
+            // 왼쪽 팀 선수 이미지 조회 url
+            for(let i = 0; i < leftResult.length; i++){
+                let url = 'https://fo4.dn.nexoncdn.co.kr/live/externalAssets/common/players/p' + leftResult[i].id.toString().substring(3,10) + '.png';
+                leftPlayerImageUrlList.push(url);
+            }
+            this.state.leftPlayerImage = leftPlayerImageUrlList;
         }
 
         //  오른쪽 팀 선수 리스트
         for(let i = 0; i < this.state.matchResult[0].matchInfo[1].player.length; i++){
             if(playerId.indexOf(this.state.matchResult[0].matchInfo[1].player[i].spId) !== -1){
-                console.log("spId match::", this.state.matchResult[0].matchInfo[1].player[i].spId);
+                console.log("spId match:", this.state.matchResult[0].matchInfo[1].player[i].spId);
             }else{
                 console.log("No match data.");
             }
@@ -138,20 +142,16 @@ class Profile extends React.Component {
                 }
             })
 
-            console.log("rightResult-->", rightResult);
             this.state.rightPlayerListName = rightResult;
 
             let rightPlayerImageUrlList = [];
 
-            // 오른쪽 팀 선수 이미지 조회
+            // 오른쪽 팀 선수 이미지 조회 url
             for(let i = 0; i < rightResult.length; i++){
                 let url = 'https://fo4.dn.nexoncdn.co.kr/live/externalAssets/common/players/p' + rightResult[i].id.toString().substring(3,10) + '.png';
-                console.log("아이디:", url)
-
                 rightPlayerImageUrlList.push(url);
-                console.log("playerImageUrlList-->", rightPlayerImageUrlList);
             }
-            //this.setState({ rightPlayerImage: rightPlayerImageUrlList });
+            this.state.rightPlayerImage = rightPlayerImageUrlList;
         }
     }
 
@@ -288,104 +288,91 @@ class Profile extends React.Component {
           </Row>
             <br/>
         </Container>
-          <Container>
-          <Col className="order-xl-1" xl="12">
-              <Card className="bg-secondary shadow">
-                  <CardHeader className="bg-white border-0">
-                      <Row className="align-items-center">
-                          <Col xs="4">
-                              <h3 className="mb-0">선수 명단</h3>
-                          </Col>
-                      </Row>
-                  </CardHeader>
-                  <CardBody>
-                      <Form>
-                          <h6 className="heading-small text-muted mb-4">
-                              선수 명단
-                          </h6>
-                          <div className="pl-lg-4">
-                              <Row>
-                                  <Col lg="6">
-                                      {isLoading ? (
-                                          <div className="loader">
-                                              <span className="loader__text">Loading...</span>
-                                          </div>
-                                      ) : (
-                                          //TODO map 루프 함수로 수정 필요
-                                          /*{result.map((index, matchId) => (*/
-                                      <FormGroup>
-                                          <img
-                                              alt="..."
-                                              className="rounded-circle"
-                                              src={"https://fo4.dn.nexoncdn.co.kr/live/externalAssets/common/players/p" + 201931 + ".png"}
-                                          /><br/>
-                                          {this.state.leftPlayerListName[0].name} <br/>
-                                          {this.state.leftPlayerListName[1].name} <br/>
-                                          {this.state.leftPlayerListName[2].name} <br/>
-                                          {this.state.leftPlayerListName[3].name} <br/>
-                                          {this.state.leftPlayerListName[4].name} <br/>
-                                          {this.state.leftPlayerListName[5].name} <br/>
-                                          {this.state.leftPlayerListName[6].name} <br/>
-                                          {this.state.leftPlayerListName[7].name} <br/>
-                                          {this.state.leftPlayerListName[8].name} <br/>
-                                          {this.state.leftPlayerListName[9].name} <br/>
-                                          {this.state.leftPlayerListName[10].name} <br/>
-                                          {this.state.leftPlayerListName[11].name} <br/>
-                                          {this.state.leftPlayerListName[12].name} <br/>
-                                          {this.state.leftPlayerListName[13].name} <br/>
-                                          {this.state.leftPlayerListName[14].name} <br/>
-                                          {this.state.leftPlayerListName[15].name} <br/>
-                                          {this.state.leftPlayerListName[16].name} <br/>
-                                          {this.state.leftPlayerListName[17].name} <br/>
-                                      </FormGroup>
-                                              /*))}*/
-                                      )}
-                                  </Col>
-                              </Row>
-                          </div>
-                          <div className="pl-lg-4">
-                              <Row>
-                                  <Col lg="6">
-                                      {isLoading ? (
-                                          <div className="loader">
-                                              <span className="loader__text">Loading...</span>
-                                          </div>
-                                      ) : (
-                                          //TODO map 루프 함수로 수정 필요
-                                           /*{rightPlayerListName.map((index, matchId) => (*/
+
+        <Container>
+          <div class="row">
+              <Col className="order-xl-1" xl="6">
+                  <Card className="bg-secondary shadow">
+                      <CardHeader className="bg-white border-0">
+                          <Row className="align-items-center">
+                              <Col xs="4">
+                                  <h3 className="mb-0">선수 명단</h3>
+                              </Col>
+                          </Row>
+                      </CardHeader>
+                      <CardBody>
+                          <Form>
+                              <div className="pl-lg-4">
+                                  <Row>
+                                      <Col lg="6">
+                                          {isLoading ? (
+                                              <div className="loader">
+                                                  <span className="loader__text">Loading...</span>
+                                              </div>
+                                          ) : (
+                                              // 왼쪽 팀 선수 이름과 이미지 출력
                                           <FormGroup>
-                                             {/* {this.state.matchResult[0].matchInfo[1].player[index].spId}*/}
-                                              {this.state.rightPlayerListName[0].name} <br/>
-                                              {this.state.rightPlayerListName[1].name} <br/>
-                                              {this.state.rightPlayerListName[2].name} <br/>
-                                              {this.state.rightPlayerListName[3].name} <br/>
-                                              {this.state.rightPlayerListName[4].name} <br/>
-                                              {this.state.rightPlayerListName[5].name} <br/>
-                                              {this.state.rightPlayerListName[6].name} <br/>
-                                              {this.state.rightPlayerListName[7].name} <br/>
-                                              {this.state.rightPlayerListName[8].name} <br/>
-                                              {this.state.rightPlayerListName[9].name} <br/>
-                                              {this.state.rightPlayerListName[10].name} <br/>
-                                              {this.state.rightPlayerListName[11].name} <br/>
-                                              {this.state.rightPlayerListName[12].name} <br/>
-                                              {this.state.rightPlayerListName[13].name} <br/>
-                                              {this.state.rightPlayerListName[14].name} <br/>
-                                              {this.state.rightPlayerListName[15].name} <br/>
-                                              {this.state.rightPlayerListName[16].name} <br/>
-                                              {this.state.rightPlayerListName[17].name} <br/>
+                                              {this.state.leftPlayerListName.map((player, index) => {
+                                                  return (<div key={index}> {this.state.leftPlayerListName[index].name} </div>)
+                                              })}
+
+                                              {this.state.leftPlayerImage.map((image, index) => {
+                                                  return (
+                                                      <div key={index}>
+                                                          <img alt="..." className="rounded-circle" src={this.state.leftPlayerImage[index]}/>
+                                                      </div>)
+                                              })}
                                           </FormGroup>
-                                             /*))}*/
-                                      )}
-                                  </Col>
-                              </Row>
-                          </div>
-                          <div className="pl-lg-4">
-                          </div>
-                          <hr className="my-4" />
-                      </Form>
-                  </CardBody>
-              </Card>
-          </Col>
+                                          )}
+                                      </Col>
+                                  </Row>
+                              </div>
+                          </Form>
+                      </CardBody>
+                  </Card>
+              </Col>
+
+              <Col className="order-xl-1" xl="6">
+                  <Card className="bg-secondary shadow">
+                      <CardHeader className="bg-white border-0">
+                          <Row className="align-items-center">
+                              <Col xs="4">
+                                  <h3 className="mb-0">선수 명단</h3>
+                              </Col>
+                          </Row>
+                      </CardHeader>
+                      <CardBody>
+                          <Form>
+                              <div className="pl-lg-4">
+                                  <Row>
+                                      <Col lg="6">
+                                          {isLoading ? (
+                                              <div className="loader">
+                                                  <span className="loader__text">Loading...</span>
+                                              </div>
+                                          ) : (
+                                              // 오른쪽 팀 선수 이름과 이미지 출력
+                                              <FormGroup>
+                                                  {this.state.rightPlayerListName.map((player, index) => {
+                                                      return (<div key={index}> {this.state.rightPlayerListName[index].name} </div>)
+                                                  })}
+
+                                                  {this.state.rightPlayerImage.map((image, index) => {
+                                                      return (
+                                                          <div key={index}>
+                                                              <img alt="..." className="rounded-circle" src={this.state.rightPlayerImage[index]}/>
+                                                          </div>)
+                                                  })}
+                                              </FormGroup>
+                                          )}
+                                      </Col>
+                                  </Row>
+                              </div>
+                          </Form>
+                      </CardBody>
+                  </Card>
+              </Col>
+          </div>
       </Container>
       </>
     );
