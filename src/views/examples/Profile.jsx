@@ -29,7 +29,8 @@ class Profile extends React.Component {
           id:'',
           leftPlayerListName:'',     // 왼쪽 팀 선수 리스트
           rightPlayerListName:'',     // 오른쪽 팀 선수 리스트
-          playerImage:''               // 선수 이미지
+          leftPlayerImage:'',             // 왼쪽 팀 선수 이미지 url 리스트
+          rightPlayerImage:''               // 오른쪽 팀 선수 이미지 url 리스트
       };
   }
 
@@ -136,32 +137,21 @@ class Profile extends React.Component {
                     }
                 }
             })
+
             console.log("rightResult-->", rightResult);
             this.state.rightPlayerListName = rightResult;
 
-            // 선수 이미지 조회
-            for(let i = 0; i < rightResult.length; i++){
-                const proxyurl = "https://cors-anywhere.herokuapp.com/";
-                let url = 'https://fo4.dn.nexoncdn.co.kr/live/externalAssets/common/players/p' + rightPlayerIdList[i] + '.png';
-                console.log("아이디:", rightPlayerIdList[i])
-                try{
-                    axios.get(proxyurl + url, {
-                        headers: {
-                            "X-Requested-With": "XMLHttpRequest"
-                        }
-                    }).then(response => {
-                        console.log("axios 실행1", response);
-                        let images = [];
-                        images.push(response);
+            let rightPlayerImageUrlList = [];
 
-                        this.setState({
-                            playerImage: images
-                        })
-                    })
-                }catch(error){
-                    console.log("에러:", error);
-                }
+            // 오른쪽 팀 선수 이미지 조회
+            for(let i = 0; i < rightResult.length; i++){
+                let url = 'https://fo4.dn.nexoncdn.co.kr/live/externalAssets/common/players/p' + rightResult[i].id.toString().substring(3,10) + '.png';
+                console.log("아이디:", url)
+
+                rightPlayerImageUrlList.push(url);
+                console.log("playerImageUrlList-->", rightPlayerImageUrlList);
             }
+            //this.setState({ rightPlayerImage: rightPlayerImageUrlList });
         }
     }
 
@@ -324,9 +314,12 @@ class Profile extends React.Component {
                                           //TODO map 루프 함수로 수정 필요
                                           /*{result.map((index, matchId) => (*/
                                       <FormGroup>
-                                          {this.state.playerImage[0]} <br/>
+                                          <img
+                                              alt="..."
+                                              className="rounded-circle"
+                                              src={"https://fo4.dn.nexoncdn.co.kr/live/externalAssets/common/players/p" + 201931 + ".png"}
+                                          /><br/>
                                           {this.state.leftPlayerListName[0].name} <br/>
-                                          {this.state.playerImage[1]} <br/>
                                           {this.state.leftPlayerListName[1].name} <br/>
                                           {this.state.leftPlayerListName[2].name} <br/>
                                           {this.state.leftPlayerListName[3].name} <br/>
