@@ -1,45 +1,13 @@
-var http = require('http');
-var express = require('express');
-var cors = require('cors');
-var app = express();
-var mysql = require('mysql');
-var connection = mysql.createConnection({
-	host     : 'localhost',
-	user     : 'root',
-	password : 'password',
-    port : 3306,
-	database : 'figle'
-});
+const http = require('http');
+const express = require('express');
+const cors = require('cors');
+const app = express();
+const { getNews } = require("./crawl.js");
+const cron = require("node-cron");
+const bodyParser = require("body-parser");
 
-connection.connect();
-
-app.get('/test', (req, res) => {
-	console.log("res-->", res, req);
-
-	connection.query('SELECT * FROM player', (err, row, fields) => {
-		if(err) throw err;
-		console.log("row:", row.length);
-
-		if(row.length == 0){
-			app.get('/fifaonline4/latest/spid.json', (req, res) => {
-				console.log("res-->", res);
-
-				let id = req.body.id;
-				let name = req.body.name;
-				console.log("id:", id, "name:", name);
-				console.log("res:", res.length);
-
-				let sql = 'INSERT INTO player (id, name) VALUES (${id}, ${name})';
-
-				// 선수 list json 데이터 insert
-				connection.query(sql, (err, result) => {
-					if(err) throw err;
-					console.log(result.length + "record inserted....");
-				})
-			});
-		}
-	});
-});
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 
 var server = http.createServer(function (request, response) {
 	console.log((new Date()) + ' Received request for ' + request.url);
@@ -61,20 +29,27 @@ server.listen(8000, function () {
 	console.log((new Date()) + ' Server is listening on port 8000');
 });
 
-app.get('/fifaonline4/latest/spid.json', (req, res) => {
-	let id = req.body.id;
-	let name = req.body.name;
-	console.log("id:", id, "name:", name);
-	console.log("res:", res.length);
-
-	let sql = 'INSERT INTO player (id, name) SET (${id}, ${name})';
-
-	// 선수 list json 데이터 insert
-	connection.query(sql, (err, results, fields) => {
-		if(err) throw err;
-		console.log(results.length + "record inserted....");
-		res.end(JSON.stringify(results));
-	})
+app.use(function(req, res, next) {
+	res.header("Access-Control-Allow-Origin", "*");
+	res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+	next();
 });
 
-connection.end();
+async function handleAsync() {
+	const sum = await getNews();
+	// console.log(sum);
+	return sum;
+}
+cron.schedule("*/1 * * * *", async () => {
+	console.log("running a task every two minutes");
+	await handleAsync();
+});
+
+app.get('/api/crawl', async(req, res) => {
+	const text = await handleAsync();
+	res.send([
+		{ 'id' : 1,
+			'text' : text
+		}
+	]);
+});
