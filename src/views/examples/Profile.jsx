@@ -87,7 +87,7 @@ class Profile extends React.Component {
   }
 
   render() {
-    const {matchResult, isLoading} = this.state;
+    const {isLoading} = this.state;
 
     if(!isLoading){
         let playerId = this.state.playerList.map(player => player.id);
@@ -123,6 +123,9 @@ class Profile extends React.Component {
             }
             this.state.leftPlayerImage = leftPlayerImageUrlList;
         }
+
+        this.state.leftListNameImage = this.state.leftPlayerListName + this.state.leftPlayerImage;
+        console.log("leftListNameImage:", this.state.leftListNameImage);
 
         //  오른쪽 팀 선수 리스트
         for(let i = 0; i < this.state.matchResult[0].matchInfo[1].player.length; i++){
@@ -186,7 +189,7 @@ class Profile extends React.Component {
                     <div className="col">
                       <div className="card-profile-stats d-flex justify-content-center mt-md-5">
                         <div>
-                          <span className="heading">{this.state.matchResult[0].matchInfo[0].matchDetail.possession}</span>
+                          <span className="heading">{this.state.matchResult[0].matchInfo[0].matchDetail.possession}%</span>
                           <span className="description">점유율</span>
                         </div>
                         <div>
@@ -248,7 +251,7 @@ class Profile extends React.Component {
                               <div className="col">
                                   <div className="card-profile-stats d-flex justify-content-center mt-md-5">
                                       <div>
-                                          <span className="heading">{this.state.matchResult[0].matchInfo[1].matchDetail.possession}</span>
+                                          <span className="heading">{this.state.matchResult[0].matchInfo[1].matchDetail.possession}%</span>
                                           <span className="description">점유율</span>
                                       </div>
                                       <div>
