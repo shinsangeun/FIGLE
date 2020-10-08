@@ -21,25 +21,30 @@ class Profile extends React.Component {
   constructor(props) {
     super(props);
       this.state ={
-          nickname:'',    //닉네임
-          accessId:'',    //아이디 시리얼 넘버
+          nickname:'',                      //닉네임
+          accessId:'',                      //아이디 시리얼 넘버
           matchResult: '',
           isLoading: true,
           playerList: '',
           id:'',
-          leftPlayerListName:'',     // 왼쪽 팀 선수 리스트
-          rightPlayerListName:'',     // 오른쪽 팀 선수 리스트
-          leftPlayerImage:'',             // 왼쪽 팀 선수 이미지 url 리스트
-          rightPlayerImage:''               // 오른쪽 팀 선수 이미지 url 리스트
+          leftPlayerListName:'',            // 왼쪽 팀 선수 리스트
+          rightPlayerListName:'',           // 오른쪽 팀 선수 리스트
+          leftPlayerImage:'',                // 왼쪽 팀 선수 이미지 url 리스트
+          rightPlayerImage:'',               // 오른쪽 팀 선수 이미지 url 리스트
+          seasonResult: '',                  // 시즌 리스트
+          seasonId: '',                     // 시즌 아이디
+          className: '',                    // 시즌 클래스 이름
+          seasonImg: ''                     // 시즌 이미지
       };
   }
 
   componentDidMount = async () => {
       await this.getMatchIdDatail();
       await this.getPlayerList();
+      await this.getSeasonIdList();
   };
 
-  getMatchIdDatail(){
+  getMatchIdDatail = () => {
     const search = this.props.location.search;
     const params = new URLSearchParams(search);
     const MatchId = params.get("matchId");
@@ -50,7 +55,7 @@ class Profile extends React.Component {
     const proxyurl = "https://cors-anywhere.herokuapp.com/";
     let getMatchIdDetail = 'https://api.nexon.co.kr/fifaonline4/v1.0/matches/' + MatchId;
     try{
-      axios.get(proxyurl + getMatchIdDetail, {
+        axios.get(proxyurl + getMatchIdDetail, {
         // 헤더 값 : 권한 시리얼 정보
         headers: {Authorization: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2NvdW50X2lkIjoiMTIyNDc2MTUyOSIsImF1dGhfaWQiOiIyIiwidG9rZW5fdHlwZSI6IkFjY2Vzc1Rva2VuIiwic2VydmljZV9pZCI6IjQzMDAxMTQ4MSIsIlgtQXBwLVJhdGUtTGltaXQiOiIyMDAwMDoxMCIsIm5iZiI6MTU3NzAwODc3MywiZXhwIjoxNjQwMDgwNzczLCJpYXQiOjE1NzcwMDg3NzN9.Pv1OIow11dye_uv69wnVleR93fa4fDrmup1oTXVuUuo'}
       }).then(response => {
@@ -84,6 +89,19 @@ class Profile extends React.Component {
               playerList: data
           });
       }
+  }
+
+  getSeasonIdList = () => {
+      const proxyurl = "https://cors-anywhere.herokuapp.com/";
+      const getSeasonIdDetail = 'https://static.api.nexon.co.kr/fifaonline4/latest/seasonid.json';
+      const seasonIdArray = [];
+
+      axios.get(proxyurl + getSeasonIdDetail).then(response => {
+          seasonIdArray.push(response.data);
+          this.setState({
+              seasonResult: seasonIdArray
+          });
+      })
   }
 
   render() {
