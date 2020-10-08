@@ -16,6 +16,8 @@ import {
 } from "reactstrap";
 // core components
 import UserHeader from "components/Headers/UserHeader.jsx";
+import PlayerList from "components/Data/PlayerList.jsx";
+import SeasonList from "../../components/Data/SeasonList";
 
 class Profile extends React.Component {
   constructor(props) {
@@ -27,21 +29,16 @@ class Profile extends React.Component {
           isLoading: true,
           playerList: '',
           id:'',
-          leftPlayerListName:'',            // 왼쪽 팀 선수 리스트
-          rightPlayerListName:'',           // 오른쪽 팀 선수 리스트
+          leftPlayerListName:'',             // 왼쪽 팀 선수 리스트
+          rightPlayerListName:'',            // 오른쪽 팀 선수 리스트
           leftPlayerImage:'',                // 왼쪽 팀 선수 이미지 url 리스트
-          rightPlayerImage:'',               // 오른쪽 팀 선수 이미지 url 리스트
-          seasonResult: '',                  // 시즌 리스트
-          seasonId: '',                     // 시즌 아이디
-          className: '',                    // 시즌 클래스 이름
-          seasonImg: ''                     // 시즌 이미지
+          rightPlayerImage:''                // 오른쪽 팀 선수 이미지 url 리스트
       };
   }
 
   componentDidMount = async () => {
       await this.getMatchIdDatail();
       await this.getPlayerList();
-      await this.getSeasonIdList();
   };
 
   getMatchIdDatail = () => {
@@ -91,23 +88,11 @@ class Profile extends React.Component {
       }
   }
 
-  getSeasonIdList = () => {
-      const proxyurl = "https://cors-anywhere.herokuapp.com/";
-      const getSeasonIdDetail = 'https://static.api.nexon.co.kr/fifaonline4/latest/seasonid.json';
-      const seasonIdArray = [];
-
-      axios.get(proxyurl + getSeasonIdDetail).then(response => {
-          seasonIdArray.push(response.data);
-          this.setState({
-              seasonResult: seasonIdArray
-          });
-      })
-  }
-
   render() {
     const {isLoading} = this.state;
 
     if(!isLoading){
+        /*<PlayerList />*/
         let playerId = this.state.playerList.map(player => player.id);
         let leftPlayerIdList = [];
         let rightPlayerIdList = [];
@@ -146,7 +131,7 @@ class Profile extends React.Component {
         console.log("leftListNameImage:", this.state.leftListNameImage);
 
         //  오른쪽 팀 선수 리스트
-        for(let i = 0; i < this.state.matchResult[0].matchInfo[1].player.length; i++){
+        for(let i = 0; i < this.state.matchResult[0].matchInfo[1].player.length; i++) {
             if(playerId.indexOf(this.state.matchResult[0].matchInfo[1].player[i].spId) !== -1){
                 console.log("spId match:", this.state.matchResult[0].matchInfo[1].player[i].spId);
             }else{
@@ -156,20 +141,22 @@ class Profile extends React.Component {
             console.log("rightPlayerIdList: ", rightPlayerIdList);
 
             let rightResult = this.state.playerList.filter((element) => {
-                for(let i = 0; i < rightPlayerIdList.length; i++){
-                    if(element.id === rightPlayerIdList[i]){
+                for (let i = 0; i < rightPlayerIdList.length; i++) {
+                    if (element.id === rightPlayerIdList[i]) {
                         return element.name;
                     }
                 }
             })
+
+            console.log("this.state.seasonResult-->", this.state.seasonResult);
 
             this.state.rightPlayerListName = rightResult;
 
             let rightPlayerImageUrlList = [];
 
             // 오른쪽 팀 선수 이미지 조회 url
-            for(let i = 0; i < rightResult.length; i++){
-                let url = 'https://fo4.dn.nexoncdn.co.kr/live/externalAssets/common/players/p' + rightResult[i].id.toString().substring(3,10) + '.png';
+            for (let i = 0; i < rightResult.length; i++) {
+                let url = 'https://fo4.dn.nexoncdn.co.kr/live/externalAssets/common/players/p' + rightResult[i].id.toString().substring(3, 10) + '.png';
                 rightPlayerImageUrlList.push(url);
             }
             this.state.rightPlayerImage = rightPlayerImageUrlList;
@@ -310,6 +297,8 @@ class Profile extends React.Component {
             <br/>
         </Container>
 
+          <SeasonList/>
+
         <Container>
           <div class="row">
               <Col className="order-xl-1" xl="6">
@@ -352,7 +341,6 @@ class Profile extends React.Component {
                       </CardBody>
                   </Card>
               </Col>
-
               <Col className="order-xl-1" xl="6">
                   <Card className="bg-secondary shadow">
                       <CardHeader className="bg-white border-0">
