@@ -28,20 +28,18 @@ class Profile extends React.Component {
           matchResult: '',
           isLoading: true,
           playerList: '',
-          id:'',
-          leftPlayerListName:'',             // 왼쪽 팀 선수 리스트
-          rightPlayerListName:'',            // 오른쪽 팀 선수 리스트
-          leftPlayerImage:'',                // 왼쪽 팀 선수 이미지 url 리스트
-          rightPlayerImage:''                // 오른쪽 팀 선수 이미지 url 리스트
+          id: '',
+          leftPlayerInfo: '',            // 왼쪽 팀 선수 정보
+          rightPlayerInfo: ''            // 오른쪽 팀 선수 정보
       };
   }
 
   componentDidMount = async () => {
-      await this.getMatchIdDatail();
+      await this.getMatchIdDetail();
       await this.getPlayerList();
   };
 
-  getMatchIdDatail = () => {
+  getMatchIdDetail = () => {
     const search = this.props.location.search;
     const params = new URLSearchParams(search);
     const MatchId = params.get("matchId");
@@ -92,20 +90,15 @@ class Profile extends React.Component {
     const {isLoading} = this.state;
 
     if(!isLoading){
-        /*<PlayerList />*/
+        /*<PlayerList/>*/
         let playerId = this.state.playerList.map(player => player.id);
         let leftPlayerIdList = [];
         let rightPlayerIdList = [];
 
         //  왼쪽 팀 선수 리스트
         for(let i = 0; i < this.state.matchResult[0].matchInfo[0].player.length; i++){
-            if(playerId.indexOf(this.state.matchResult[0].matchInfo[0].player[i].spId) !== -1){
-                console.log("spId match:", this.state.matchResult[0].matchInfo[0].player[i].spId);
-            }else{
-                console.log("No match data.");
-            }
             leftPlayerIdList.push(this.state.matchResult[0].matchInfo[0].player[i].spId);
-            console.log("leftPlayerIdList: ", leftPlayerIdList);
+            // console.log("leftPlayerIdList: ", leftPlayerIdList);
 
             let leftResult = this.state.playerList.filter((element) => {
                 for(let i = 0; i < leftPlayerIdList.length; i++){
@@ -117,28 +110,21 @@ class Profile extends React.Component {
 
             this.state.leftPlayerListName = leftResult;
 
-            let leftPlayerImageUrlList = [];
+            let leftPlayerImageSeasonIdList = [];
 
-            // 왼쪽 팀 선수 이미지 조회 url
+            // 왼쪽 팀 선수 이미지 조회 url & 시즌 아이디
             for(let i = 0; i < leftResult.length; i++){
                 let url = 'https://fo4.dn.nexoncdn.co.kr/live/externalAssets/common/players/p' + leftResult[i].id.toString().substring(3,10) + '.png';
-                leftPlayerImageUrlList.push(url);
+                let seasonId = leftResult[i].id.toString().substring(0, 3);
+                leftPlayerImageSeasonIdList.push({playerName: leftResult[i], url: url, seasonId: seasonId});
             }
-            this.state.leftPlayerImage = leftPlayerImageUrlList;
+            this.state.leftPlayerInfo = leftPlayerImageSeasonIdList;
         }
-
-        this.state.leftListNameImage = this.state.leftPlayerListName + this.state.leftPlayerImage;
-        console.log("leftListNameImage:", this.state.leftListNameImage);
 
         //  오른쪽 팀 선수 리스트
         for(let i = 0; i < this.state.matchResult[0].matchInfo[1].player.length; i++) {
-            if(playerId.indexOf(this.state.matchResult[0].matchInfo[1].player[i].spId) !== -1){
-                console.log("spId match:", this.state.matchResult[0].matchInfo[1].player[i].spId);
-            }else{
-                console.log("No match data.");
-            }
             rightPlayerIdList.push(this.state.matchResult[0].matchInfo[1].player[i].spId);
-            console.log("rightPlayerIdList: ", rightPlayerIdList);
+            // console.log("rightPlayerIdList: ", rightPlayerIdList);
 
             let rightResult = this.state.playerList.filter((element) => {
                 for (let i = 0; i < rightPlayerIdList.length; i++) {
@@ -148,18 +134,15 @@ class Profile extends React.Component {
                 }
             })
 
-            console.log("this.state.seasonResult-->", this.state.seasonResult);
+            let rightPlayerImageSeasonIdList = [];
 
-            this.state.rightPlayerListName = rightResult;
-
-            let rightPlayerImageUrlList = [];
-
-            // 오른쪽 팀 선수 이미지 조회 url
+            // 오른쪽 팀 선수 이미지 조회 url & 시즌 아이디
             for (let i = 0; i < rightResult.length; i++) {
                 let url = 'https://fo4.dn.nexoncdn.co.kr/live/externalAssets/common/players/p' + rightResult[i].id.toString().substring(3, 10) + '.png';
-                rightPlayerImageUrlList.push(url);
+                let seasonId = rightResult[i].id.toString().substring(0, 3);
+                rightPlayerImageSeasonIdList.push({playerName: rightResult[i], url: url, seasonId: seasonId});
             }
-            this.state.rightPlayerImage = rightPlayerImageUrlList;
+            this.state.rightPlayerInfo = rightPlayerImageSeasonIdList;
         }
     }
 
@@ -297,7 +280,7 @@ class Profile extends React.Component {
             <br/>
         </Container>
 
-          <SeasonList/>
+          <SeasonList className="test"/>
 
         <Container>
           <div class="row">
@@ -322,14 +305,11 @@ class Profile extends React.Component {
                                           ) : (
                                               // 왼쪽 팀 선수 이름과 이미지 출력
                                           <FormGroup>
-                                              {this.state.leftPlayerListName.map((player, index) => {
-                                                  return (<div key={index}> {this.state.leftPlayerListName[index].name} </div>)
-                                              })}
-
-                                              {this.state.leftPlayerImage.map((image, index) => {
+                                              {this.state.leftPlayerInfo.map((image, index) => {
                                                   return (
                                                       <div key={index}>
-                                                          <img alt="..." className="rounded-circle" src={this.state.leftPlayerImage[index]}/>
+                                                          <img alt="..." className="rounded-circle" src={this.state.leftPlayerInfo[index].url}/><br/>
+                                                          {this.state.leftPlayerInfo[index].seasonId} / {this.state.leftPlayerInfo[index].playerName.name}
                                                       </div>)
                                               })}
                                           </FormGroup>
@@ -362,14 +342,11 @@ class Profile extends React.Component {
                                           ) : (
                                               // 오른쪽 팀 선수 이름과 이미지 출력
                                               <FormGroup>
-                                                  {this.state.rightPlayerListName.map((player, index) => {
-                                                      return (<div key={index}> {this.state.rightPlayerListName[index].name} </div>)
-                                                  })}
-
-                                                  {this.state.rightPlayerImage.map((image, index) => {
+                                                  {this.state.rightPlayerInfo.map((image, index) => {
                                                       return (
                                                           <div key={index}>
-                                                              <img alt="..." className="rounded-circle" src={this.state.rightPlayerImage[index]}/>
+                                                              <img alt="..." className="rounded-circle" src={this.state.rightPlayerInfo[index].url}/> <br/>
+                                                              {this.state.rightPlayerInfo[index].seasonId} / {this.state.rightPlayerInfo[index].playerName.name}
                                                           </div>)
                                                   })}
                                               </FormGroup>

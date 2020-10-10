@@ -30,12 +30,11 @@ class SeasonList extends React.Component {
             <div className="seasonList">
                 {this.state.seasonResult.map((season, index)  => {
                     return (
-                        <div>
-                            {this.state.seasonResult[index].seasonId}
-                            {this.state.seasonResult[index].className}
-                            {this.state.seasonResult[index].seasonImg}
+                        <div className="name">
+                            {this.state.seasonResult[index].seasonId} - {this.state.seasonResult[index].className} - <img src= {this.state.seasonResult[index].seasonImg}/>
                         </div>
                     )})}
+
             </div>
         );
     }
