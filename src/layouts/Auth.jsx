@@ -33,7 +33,6 @@ class Auth extends React.Component {
       accessId:'',  //아이디 시리얼 넘버
       level:0,      //레벨
     };
-    //this.getUserId(this.state.nickname);
   }
 
   handleChange = (e) => {
@@ -41,7 +40,6 @@ class Auth extends React.Component {
       nickname: e.target.value
     });
     console.log("e:", e.target.value);
-   // this.getUserId(e.target.value);
   };
 
    async getUserId(nickname){

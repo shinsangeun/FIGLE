@@ -18,6 +18,15 @@ import {
 import UserHeader from "components/Headers/UserHeader.jsx";
 import PlayerList from "components/Data/PlayerList.jsx";
 import SeasonList from "../../components/Data/SeasonList";
+import {Bar, Line} from "react-chartjs-2";
+import Chart from "chart.js";
+// core components
+import {
+    chartOptions,
+    parseOptions,
+    chartExample1,
+    chartExample2
+} from "variables/charts.jsx";
 
 class Profile extends React.Component {
   constructor(props) {
@@ -30,7 +39,8 @@ class Profile extends React.Component {
           playerList: '',
           id: '',
           leftPlayerInfo: '',            // 왼쪽 팀 선수 정보
-          rightPlayerInfo: ''            // 오른쪽 팀 선수 정보
+          rightPlayerInfo: '',            // 오른쪽 팀 선수 정보
+          chartExample1Data: "data1"
       };
   }
 
@@ -85,6 +95,12 @@ class Profile extends React.Component {
           });
       }
   }
+
+    componentWillMount() {
+        if (window.Chart) {
+            parseOptions(Chart, chartOptions());
+        }
+    }
 
   render() {
     const {isLoading} = this.state;
@@ -280,9 +296,11 @@ class Profile extends React.Component {
             <br/>
         </Container>
 
-          <SeasonList className="test"/>
+         {/* <SeasonList />*/}
 
-        <Container>
+         <br/>
+
+        <Container className="mt--3" fluid>
           <div class="row">
               <Col className="order-xl-1" xl="6">
                   <Card className="bg-secondary shadow">
@@ -295,7 +313,7 @@ class Profile extends React.Component {
                       </CardHeader>
                       <CardBody>
                           <Form>
-                              <div className="pl-lg-4">
+                              <div className="pl-lg-6">
                                   <Row>
                                       <Col lg="6">
                                           {isLoading ? (
@@ -310,8 +328,22 @@ class Profile extends React.Component {
                                                       <div key={index}>
                                                           <img alt="..." className="rounded-circle" src={this.state.leftPlayerInfo[index].url}/><br/>
                                                           {this.state.leftPlayerInfo[index].seasonId} / {this.state.leftPlayerInfo[index].playerName.name}
+
+                                                          <Card className="bg-gradient-default shadow card">
+                                                              <CardBody>
+                                                                  <div className="row">
+                                                                      <Line
+                                                                          data={chartExample1[this.state.chartExample1Data]}
+                                                                          options={chartExample1.options}
+                                                                          getDatasetAtEvent={e => console.log(e)}
+                                                                          width={"30%"}
+                                                                      />
+                                                                  </div>
+                                                              </CardBody>
+                                                          </Card>
                                                       </div>)
                                               })}
+
                                           </FormGroup>
                                           )}
                                       </Col>
@@ -347,6 +379,19 @@ class Profile extends React.Component {
                                                           <div key={index}>
                                                               <img alt="..." className="rounded-circle" src={this.state.rightPlayerInfo[index].url}/> <br/>
                                                               {this.state.rightPlayerInfo[index].seasonId} / {this.state.rightPlayerInfo[index].playerName.name}
+
+                                                              <Card className="bg-gradient-default shadow card">
+                                                                  <CardBody>
+                                                                      <div className="row">
+                                                                          <Line
+                                                                              data={chartExample1[this.state.chartExample1Data]}
+                                                                              options={chartExample1.options}
+                                                                              getDatasetAtEvent={e => console.log(e)}
+                                                                              width={"30%"}
+                                                                          />
+                                                                      </div>
+                                                                  </CardBody>
+                                                              </Card>
                                                           </div>)
                                                   })}
                                               </FormGroup>
