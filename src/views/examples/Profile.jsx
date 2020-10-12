@@ -67,8 +67,6 @@ class Profile extends React.Component {
         headers: {Authorization: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2NvdW50X2lkIjoiMTIyNDc2MTUyOSIsImF1dGhfaWQiOiIyIiwidG9rZW5fdHlwZSI6IkFjY2Vzc1Rva2VuIiwic2VydmljZV9pZCI6IjQzMDAxMTQ4MSIsIlgtQXBwLVJhdGUtTGltaXQiOiIyMDAwMDoxMCIsIm5iZiI6MTU3NzAwODc3MywiZXhwIjoxNjQwMDgwNzczLCJpYXQiOjE1NzcwMDg3NzN9.Pv1OIow11dye_uv69wnVleR93fa4fDrmup1oTXVuUuo'}
       }).then(response => {
         matchResultArray.push(response.data);
-        console.log("matchResultArray==", matchResultArray);
-
         this.setState({
           matchResult: matchResultArray,
           isLoading: false
@@ -115,8 +113,6 @@ class Profile extends React.Component {
         let responseOK = response && response.ok;
         if(responseOK){
             let data = await response.json();
-            console.log("data:", data);
-
             this.setState({
                 positionList: data
             });
@@ -125,36 +121,6 @@ class Profile extends React.Component {
 
   // TODO 선수 포지션(spposition) 메타데이터 조회
 
-/* TODO
-{
-    "spId": 216189125,
-    "spPosition": 27,
-    "spGrade": 3,
-    "status": {
-        "shoot": 0,
-        "effectiveShoot": 0,
-        "assist": 0,
-        "goal": 0,
-        "dribble": 0,
-        "intercept": 0,
-        "defending": 0,
-        "passTry": 4,
-        "passSuccess": 2,
-        "dribbleTry": 0,
-        "dribbleSuccess": 0,
-        "ballPossesionTry": 0,
-        "ballPossesionSuccess": 0,
-        "aerialTry": 0,
-        "aerialSuccess": 0,
-        "blockTry": 0,
-        "block": 0,
-        "tackleTry": 0,
-        "tackle": 0,
-        "yellowCards": 0,
-        "redCards": 0,
-        "spRating": 5.4
-    }
-},*/
     componentWillMount() {
         if (window.Chart) {
             parseOptions(Chart, chartOptions());
@@ -166,7 +132,6 @@ class Profile extends React.Component {
 
     if(!isLoading){
         /*<PlayerList/>*/
-        let playerId = this.state.playerList.map(player => player.id);
         let leftPlayerIdList = [];
         let rightPlayerIdList = [];
 
@@ -176,7 +141,6 @@ class Profile extends React.Component {
                 spId: this.state.matchResult[0].matchInfo[0].player[i].spId,
                 spPosition: this.state.matchResult[0].matchInfo[0].player[i].spPosition
             });
-            console.log("leftPlayerIdList: ", leftPlayerIdList);
 
             let leftResult = this.state.playerList.filter((element) => {
                 for(let i in leftPlayerIdList){
@@ -191,7 +155,6 @@ class Profile extends React.Component {
             let leftPlayerPosition = this.state.positionList.filter((element) => {
                  for(let i in leftPlayerIdList){
                     if(element.spposition === leftPlayerIdList[i].spPosition){
-                        console.log("element.desc:", element.spposition);
                         return element.desc;
                     }
                 }
@@ -207,7 +170,12 @@ class Profile extends React.Component {
             for(let i = 0; i < leftResult.length; i++){
                 let url = 'https://fo4.dn.nexoncdn.co.kr/live/externalAssets/common/players/p' + leftResult[i].id.toString().substring(3,10) + '.png';
                 let seasonId = leftResult[i].id.toString().substring(0, 3);
-                leftPlayerImageSeasonIdList.push({playerName: leftResult[i], url: url, seasonId: seasonId, leftPlayerPosition: leftPlayerPosition[i]});
+                leftPlayerImageSeasonIdList.push({
+                    playerName: leftResult[i],
+                    url: url,
+                    seasonId: seasonId,
+                    leftPlayerPosition: leftPlayerPosition[i]
+                });
             }
             this.state.leftPlayerInfo = leftPlayerImageSeasonIdList;
             console.log("this::", this.state.leftPlayerInfo);
@@ -390,7 +358,7 @@ class Profile extends React.Component {
                       </CardHeader>
                       <CardBody>
                           <Form>
-                              <div className="pl-lg-6">
+                              <div className="pl-lg-4">
                                   <Row>
                                       <Col lg="6">
                                           {isLoading ? (
@@ -403,10 +371,44 @@ class Profile extends React.Component {
                                               {this.state.leftPlayerInfo.map((image, index) => {
                                                   return (
                                                       <div key={index}>
-                                                          <img alt="..." className="rounded-circle" src={this.state.leftPlayerInfo[index].url}/><br/>
-                                                          {this.state.leftPlayerInfo[index].seasonId} / {this.state.leftPlayerInfo[index].playerName.name} / {this.state.leftPlayerInfo[index].leftPlayerPosition.desc}
+                                                          <img alt="..." className="rounded-circle"
+                                                               src={this.state.leftPlayerInfo[index].url}/>
+                                                               {/*TODO 시즌 아이디 이미지 필요*/}
+                                                          {this.state.leftPlayerInfo[index].seasonId} / {this.state.leftPlayerInfo[index].playerName.name}
+                                                          <br/>
+                                                          포지션: {this.state.matchResult[0].matchInfo[0].player[index].spPosition}/
+                                                          강화 등급: <div
+                                                          className="btn btn-primary btn-sm">{this.state.matchResult[0].matchInfo[0].player[index].spGrade}</div>
+                                                          / 선수 평점: <div
+                                                          className="btn btn-primary btn-sm">{this.state.matchResult[0].matchInfo[0].player[index].status.spRating}</div>
 
-                                                          <Card className="bg-gradient-default shadow card">
+                                                          <Table>
+                                                              <tbody>
+                                                              <tr align="center">
+                                                                  <td>슛</td>
+                                                                  <td>유효 슛</td>
+                                                                  <td>어시스트</td>
+                                                                  <td>득점</td>
+                                                                  <td>패스 시도</td>
+                                                                  <td>패스 성공</td>
+                                                                  <td>블락 성공</td>
+                                                                  <td>태클 성공</td>
+                                                              </tr>
+                                                              <tr align="center">
+                                                                  <td>{this.state.matchResult[0].matchInfo[0].player[index].status.shoot}</td>
+                                                                  <td>{this.state.matchResult[0].matchInfo[0].player[index].status.effectiveShoot}</td>
+                                                                  <td>{this.state.matchResult[0].matchInfo[0].player[index].status.assist}</td>
+                                                                  <td>{this.state.matchResult[0].matchInfo[0].player[index].status.goal}</td>
+                                                                  <td>{this.state.matchResult[0].matchInfo[0].player[index].status.passTry}</td>
+                                                                  <td>{this.state.matchResult[0].matchInfo[0].player[index].status.passSuccess}</td>
+                                                                  <td>{this.state.matchResult[0].matchInfo[0].player[index].status.block}</td>
+                                                                  <td>{this.state.matchResult[0].matchInfo[0].player[index].status.tackle}</td>
+                                                              </tr>
+                                                              </tbody>
+                                                          </Table>
+
+                                                          {/* TODO 선수 차트 필요 */}
+                                                          {/* <Card className="bg-gradient-default shadow card">
                                                               <CardBody>
                                                                   <div className="row">
                                                                       <Line
@@ -417,7 +419,7 @@ class Profile extends React.Component {
                                                                       />
                                                                   </div>
                                                               </CardBody>
-                                                          </Card>
+                                                          </Card>*/}
                                                       </div>)
                                               })}
 
@@ -454,10 +456,40 @@ class Profile extends React.Component {
                                                   {this.state.rightPlayerInfo.map((image, index) => {
                                                       return (
                                                           <div key={index}>
-                                                              <img alt="..." className="rounded-circle" src={this.state.rightPlayerInfo[index].url}/> <br/>
-                                                              {this.state.rightPlayerInfo[index].seasonId} / {this.state.rightPlayerInfo[index].playerName.name}
+                                                              <img alt="..." className="rounded-circle" src={this.state.rightPlayerInfo[index].url}/>
+                                                              {/*TODO 시즌 아이디 이미지 필요*/}
+                                                              {this.state.rightPlayerInfo[index].seasonId} / {this.state.rightPlayerInfo[index].playerName.name} <br/>
+                                                              포지션: {this.state.matchResult[0].matchInfo[1].player[index].spPosition}/
+                                                              강화 등급: <div className="btn btn-primary btn-sm">{this.state.matchResult[0].matchInfo[1].player[index].spGrade}</div>
+                                                              / 선수 평점: <div className="btn btn-primary btn-sm">{this.state.matchResult[0].matchInfo[1].player[index].status.spRating}</div> <br/>
 
-                                                              <Card className="bg-gradient-default shadow card">
+                                                              <Table>
+                                                                  <tbody>
+                                                                  <tr align="center">
+                                                                      <td>슛</td>
+                                                                      <td>유효 슛</td>
+                                                                      <td>어시스트</td>
+                                                                      <td>득점</td>
+                                                                      <td>패스 시도</td>
+                                                                      <td>패스 성공</td>
+                                                                      <td>블락 성공</td>
+                                                                      <td>태클 성공</td>
+                                                                  </tr>
+                                                                  <tr align="center">
+                                                                      <td>{this.state.matchResult[0].matchInfo[1].player[index].status.shoot}</td>
+                                                                      <td>{this.state.matchResult[0].matchInfo[1].player[index].status.effectiveShoot}</td>
+                                                                      <td>{this.state.matchResult[0].matchInfo[1].player[index].status.assist}</td>
+                                                                      <td>{this.state.matchResult[0].matchInfo[1].player[index].status.goal}</td>
+                                                                      <td>{this.state.matchResult[0].matchInfo[1].player[index].status.passTry}</td>
+                                                                      <td>{this.state.matchResult[0].matchInfo[1].player[index].status.passSuccess}</td>
+                                                                      <td>{this.state.matchResult[0].matchInfo[1].player[index].status.block}</td>
+                                                                      <td>{this.state.matchResult[0].matchInfo[1].player[index].status.tackle}</td>
+                                                                  </tr>
+                                                                  </tbody>
+                                                              </Table>
+
+                                                              {/*TODO 선수 차트 필요*/}
+                                                              {/*<Card className="bg-gradient-default shadow card">
                                                                   <CardBody>
                                                                       <div className="row">
                                                                           <Line
@@ -468,7 +500,7 @@ class Profile extends React.Component {
                                                                           />
                                                                       </div>
                                                                   </CardBody>
-                                                              </Card>
+                                                              </Card>*/}
                                                           </div>)
                                                   })}
                                               </FormGroup>
