@@ -1,6 +1,5 @@
 import React from "react";
 import axios from "axios";
-import Profile from "views/examples/Profile.jsx"
 
 class PlayerPosition extends React.Component {
     constructor(props) {
@@ -36,7 +35,7 @@ class PlayerPosition extends React.Component {
                             {this.state.positionResult[index].desc}
                         </div>
                     )})}
-            </div> 
+            </div>
         );
     }
 }

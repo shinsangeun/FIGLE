@@ -1,6 +1,4 @@
 import React from "react";
-import axios from "axios";
-import Profile from "views/examples/Profile.jsx"
 
 class PlayerList extends React.Component {
     constructor(props) {
