@@ -113,7 +113,7 @@ class Tables extends React.Component {
   };
 
   render() {
-    const { matchIdList, matchResult, isLoading} = this.state;
+    const {matchResult, isLoading} = this.state;
 
     if(!isLoading){
       // matchDate 내림차순 정렬

@@ -41,7 +41,8 @@ class Profile extends React.Component {
           id: '',
           leftPlayerInfo: '',            // 왼쪽 팀 선수 정보
           rightPlayerInfo: '',            // 오른쪽 팀 선수 정보
-          chartExample1Data: "data1"
+          chartExample1Data: "data1",
+          seasonResult:''
       };
   }
 
@@ -49,6 +50,7 @@ class Profile extends React.Component {
       await this.getMatchIdDetail();
       await this.getPlayerList();
       await this.getPositionList();
+      await this.getSppositionList();
   };
 
   getMatchIdDetail = () => {
@@ -119,7 +121,45 @@ class Profile extends React.Component {
         }
     }
 
-  // TODO 선수 포지션(spposition) 메타데이터 조회
+    // TODO 선수 포지션(spposition) 메타데이터 조회
+    getSppositionList = async () => {
+        const proxyurl = "https://cors-anywhere.herokuapp.com/";
+        const getSeasonIdDetail = 'https://static.api.nexon.co.kr/fifaonline4/latest/seasonid.json';
+
+        axios.get(proxyurl + getSeasonIdDetail).then(response => {
+            let data = response.data;
+            console.log("getSppositionList:", data);
+            this.setState({
+                seasonResult: data
+            });
+        })
+    }
+
+    // 유저 닉네임으로 유저 레벨 조회
+    getMatchLevel1 = async (nickname) => {
+        const getUserLevel = '/fifaonline4/v1.0/users?nickname=' + nickname;
+        console.log("getMatchLevel1:", nickname);
+
+        const options = {
+            method: 'GET',
+            headers: {
+                "Authorization": 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2NvdW50X2lkIjoiMTIyNDc2MTUyOSIsImF1dGhfaWQiOiIyIiwidG9rZW5fdHlwZSI6IkFjY2Vzc1Rva2VuIiwic2VydmljZV9pZCI6IjQzMDAxMTQ4MSIsIlgtQXBwLVJhdGUtTGltaXQiOiIyMDAwMDoxMCIsIm5iZiI6MTU3NzAwODc3MywiZXhwIjoxNjQwMDgwNzczLCJpYXQiOjE1NzcwMDg3NzN9.Pv1OIow11dye_uv69wnVleR93fa4fDrmup1oTXVuUuo',
+                "Access-Control-Allow-Origin": "*",
+                "Accept": "*/*",
+                "Host": "api.nexon.co.kr",
+                "Connection":"keep-alive"
+            }
+        };
+        let response = await fetch(getUserLevel, options);
+        let responseOK = response && response.ok;
+        if(responseOK){
+            let data = await response.json();
+            console.log("data:", data);
+            this.setState({
+                level: data.level
+            })
+        }
+    }
 
     componentWillMount() {
         if (window.Chart) {
@@ -150,8 +190,6 @@ class Profile extends React.Component {
                 }
             })
 
-            console.log("leftResult:", leftResult);
-
             let leftPlayerPosition = this.state.positionList.filter((element) => {
                  for(let i in leftPlayerIdList){
                     if(element.spposition === leftPlayerIdList[i].spPosition){
@@ -159,8 +197,6 @@ class Profile extends React.Component {
                     }
                 }
             })
-
-            console.log("leftPlayerPosition:", leftPlayerPosition);
 
             this.state.leftPlayerListName = leftResult;
 
@@ -178,8 +214,6 @@ class Profile extends React.Component {
                 });
             }
             this.state.leftPlayerInfo = leftPlayerImageSeasonIdList;
-            console.log("this::", this.state.leftPlayerInfo);
-
         }
 
         //  오른쪽 팀 선수 리스트
@@ -195,13 +229,26 @@ class Profile extends React.Component {
                 }
             })
 
+            let rightPlayerPosition = this.state.positionList.filter((element) => {
+                for(let i in rightPlayerIdList){
+                    if(element.spposition === rightPlayerIdList[i].spPosition){
+                        return element.desc;
+                    }
+                }
+            })
+
             let rightPlayerImageSeasonIdList = [];
 
             // 오른쪽 팀 선수 이미지 조회 url & 시즌 아이디
             for (let i = 0; i < rightResult.length; i++) {
                 let url = 'https://fo4.dn.nexoncdn.co.kr/live/externalAssets/common/players/p' + rightResult[i].id.toString().substring(3, 10) + '.png';
                 let seasonId = rightResult[i].id.toString().substring(0, 3);
-                rightPlayerImageSeasonIdList.push({playerName: rightResult[i], url: url, seasonId: seasonId});
+                rightPlayerImageSeasonIdList.push({
+                    playerName: rightResult[i],
+                    url: url,
+                    seasonId: seasonId,
+                    rightPlayerPosition: rightPlayerPosition[i]
+                });
             }
             this.state.rightPlayerInfo = rightPlayerImageSeasonIdList;
         }
@@ -269,7 +316,8 @@ class Profile extends React.Component {
                     </div>
                   </Row>
                   <div className="text-center">
-                    <h3>{this.state.matchResult[0].matchInfo[0].nickname}</h3>
+                      <Button onClick={this.getMatchLevel1(this.state.matchResult[0].matchInfo[0].nickname)}>Lv: {this.state.level} / {this.state.matchResult[0].matchInfo[0].nickname}</Button>
+                      <h3>{this.state.matchResult[0].matchInfo[0].nickname}</h3>
                   </div>
                 </CardBody>
                   )}
@@ -331,6 +379,7 @@ class Profile extends React.Component {
                               </div>
                           </Row>
                           <div className="text-center">
+                             {/* <Button onClick={this.getMatchLevel2(this.state.matchResult[0].matchInfo[1].nickname)}>Lv: {this.state.level} / {this.state.matchResult[0].matchInfo[1].nickname}</Button>*/}
                               <h3>{this.state.matchResult[0].matchInfo[1].nickname}</h3>
                           </div>
                       </CardBody>
@@ -341,7 +390,7 @@ class Profile extends React.Component {
             <br/>
         </Container>
 
-          <SeasonList />
+          <SeasonList children={this.state.seasonId} />
 
          <br/>
 
@@ -374,7 +423,7 @@ class Profile extends React.Component {
                                                           <img alt="..." className="rounded-circle"
                                                                src={this.state.leftPlayerInfo[index].url}/>
                                                                {/*TODO 시즌 아이디 이미지 필요*/}
-                                                          {this.state.leftPlayerInfo[index].seasonId} / {this.state.leftPlayerInfo[index].playerName.name}
+                                                          <img src= {this.state.seasonResult[index].seasonImg}/> / {this.state.leftPlayerInfo[index].seasonId}/ {this.state.leftPlayerInfo[index].playerName.name}
                                                           <br/>
                                                           포지션: {this.state.matchResult[0].matchInfo[0].player[index].spPosition}/
                                                           강화 등급: <div
