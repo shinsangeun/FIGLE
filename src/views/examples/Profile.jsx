@@ -137,29 +137,41 @@ class Profile extends React.Component {
 
     // 유저 닉네임으로 유저 레벨 조회
     getMatchLevel1 = async (nickname) => {
+        const proxyurl = "https://cors-anywhere.herokuapp.com/";
         const getUserLevel = '/fifaonline4/v1.0/users?nickname=' + nickname;
         console.log("getMatchLevel1:", nickname);
 
-        const options = {
-            method: 'GET',
+        return axios.get(proxyurl + getUserLevel,{
             headers: {
-                "Authorization": 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2NvdW50X2lkIjoiMTIyNDc2MTUyOSIsImF1dGhfaWQiOiIyIiwidG9rZW5fdHlwZSI6IkFjY2Vzc1Rva2VuIiwic2VydmljZV9pZCI6IjQzMDAxMTQ4MSIsIlgtQXBwLVJhdGUtTGltaXQiOiIyMDAwMDoxMCIsIm5iZiI6MTU3NzAwODc3MywiZXhwIjoxNjQwMDgwNzczLCJpYXQiOjE1NzcwMDg3NzN9.Pv1OIow11dye_uv69wnVleR93fa4fDrmup1oTXVuUuo',
-                "Access-Control-Allow-Origin": "*",
-                "Accept": "*/*",
-                "Host": "api.nexon.co.kr",
-                "Connection":"keep-alive"
+                Authorization: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2NvdW50X2lkIjoiMTIyNDc2MTUyOSIsImF1dGhfaWQiOiIyIiwidG9rZW5fdHlwZSI6IkFjY2Vzc1Rva2VuIiwic2VydmljZV9pZCI6IjQzMDAxMTQ4MSIsIlgtQXBwLVJhdGUtTGltaXQiOiIyMDAwMDoxMCIsIm5iZiI6MTU3NzAwODc3MywiZXhwIjoxNjQwMDgwNzczLCJpYXQiOjE1NzcwMDg3NzN9.Pv1OIow11dye_uv69wnVleR93fa4fDrmup1oTXVuUuo'
             }
-        };
-        let response = await fetch(getUserLevel, options);
-        let responseOK = response && response.ok;
-        if(responseOK){
-            let data = await response.json();
+        }).then(response => {
+            let data = response.data;
             console.log("data:", data);
             this.setState({
-                level: data.level
-            })
-        }
+                level1: data.level
+            });
+        })
     }
+
+    // 유저 닉네임으로 유저 레벨 조회
+  /*  getMatchLevel2 = async (nickname) => {
+        const proxyurl = "https://cors-anywhere.herokuapp.com/";
+        const getUserLevel = '/fifaonline4/v1.0/users?nickname=' + nickname;
+        console.log("getMatchLevel1:", nickname);
+
+        return axios.get(proxyurl + getUserLevel,{
+            headers: {
+                Authorization: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2NvdW50X2lkIjoiMTIyNDc2MTUyOSIsImF1dGhfaWQiOiIyIiwidG9rZW5fdHlwZSI6IkFjY2Vzc1Rva2VuIiwic2VydmljZV9pZCI6IjQzMDAxMTQ4MSIsIlgtQXBwLVJhdGUtTGltaXQiOiIyMDAwMDoxMCIsIm5iZiI6MTU3NzAwODc3MywiZXhwIjoxNjQwMDgwNzczLCJpYXQiOjE1NzcwMDg3NzN9.Pv1OIow11dye_uv69wnVleR93fa4fDrmup1oTXVuUuo'
+            }
+        }).then(response => {
+            let data = response.data;
+            console.log("data:", data);
+            this.setState({
+                level2: data.level
+            });
+        })
+    }*/
 
     componentWillMount() {
         if (window.Chart) {
@@ -171,7 +183,6 @@ class Profile extends React.Component {
     const {isLoading} = this.state;
 
     if(!isLoading){
-        /*<PlayerList/>*/
         let leftPlayerIdList = [];
         let rightPlayerIdList = [];
 
@@ -200,6 +211,18 @@ class Profile extends React.Component {
 
             this.state.leftPlayerListName = leftResult;
 
+            let leftPlayerSeasonImg = this.state.seasonResult.filter((element) => {
+                for(let i in this.state.leftPlayerInfo){
+                    if(element.seasonId === parseInt(this.state.leftPlayerInfo[i].seasonId)){
+                        console.log("element.seasonImg:", element.seasonImg);
+                        let seasonImg = element.seasonImg;
+                        return seasonImg;
+                    }
+                }
+            })
+
+            console.log("leftPlayerSeasonImg==>", leftPlayerSeasonImg);
+
             let leftPlayerImageSeasonIdList = [];
 
             // 왼쪽 팀 선수 이미지 조회 url & 시즌 아이디
@@ -211,6 +234,7 @@ class Profile extends React.Component {
                     url: url,
                     seasonId: seasonId,
                     leftPlayerPosition: leftPlayerPosition[i]
+                    // seasonImg: leftPlayerSeasonImg
                 });
             }
             this.state.leftPlayerInfo = leftPlayerImageSeasonIdList;
@@ -237,6 +261,15 @@ class Profile extends React.Component {
                 }
             })
 
+            let rightPlayerSeasonImg = this.state.seasonResult.filter((element) => {
+                for(let i in this.state.rightPlayerInfo){
+                    if(element.seasonId === parseInt(this.state.rightPlayerInfo[i].seasonId)){
+                        return element.seasonImg;
+                    }
+                }
+            })
+            // console.log("rightPlayerSeasonImg==>", rightPlayerSeasonImg);
+
             let rightPlayerImageSeasonIdList = [];
 
             // 오른쪽 팀 선수 이미지 조회 url & 시즌 아이디
@@ -247,7 +280,8 @@ class Profile extends React.Component {
                     playerName: rightResult[i],
                     url: url,
                     seasonId: seasonId,
-                    rightPlayerPosition: rightPlayerPosition[i]
+                    rightPlayerPosition: rightPlayerPosition[i],
+                    seasonImg: rightPlayerSeasonImg
                 });
             }
             this.state.rightPlayerInfo = rightPlayerImageSeasonIdList;
@@ -316,7 +350,7 @@ class Profile extends React.Component {
                     </div>
                   </Row>
                   <div className="text-center">
-                      <Button onClick={this.getMatchLevel1(this.state.matchResult[0].matchInfo[0].nickname)}>Lv: {this.state.level} / {this.state.matchResult[0].matchInfo[0].nickname}</Button>
+                      <Button onClick={this.getMatchLevel1(this.state.matchResult[0].matchInfo[0].nickname)}>Lv: {this.state.level1} / {this.state.matchResult[0].matchInfo[0].nickname}</Button>
                       <h3>{this.state.matchResult[0].matchInfo[0].nickname}</h3>
                   </div>
                 </CardBody>
@@ -379,7 +413,7 @@ class Profile extends React.Component {
                               </div>
                           </Row>
                           <div className="text-center">
-                             {/* <Button onClick={this.getMatchLevel2(this.state.matchResult[0].matchInfo[1].nickname)}>Lv: {this.state.level} / {this.state.matchResult[0].matchInfo[1].nickname}</Button>*/}
+                             {/* <Button onClick={this.getMatchLevel2(this.state.matchResult[0].matchInfo[1].nickname)}>Lv: {this.state.level2} / {this.state.matchResult[0].matchInfo[1].nickname}</Button>*/}
                               <h3>{this.state.matchResult[0].matchInfo[1].nickname}</h3>
                           </div>
                       </CardBody>
@@ -423,7 +457,7 @@ class Profile extends React.Component {
                                                           <img alt="..." className="rounded-circle"
                                                                src={this.state.leftPlayerInfo[index].url}/>
                                                                {/*TODO 시즌 아이디 이미지 필요*/}
-                                                          <img src= {this.state.seasonResult[index].seasonImg}/> / {this.state.leftPlayerInfo[index].seasonId}/ {this.state.leftPlayerInfo[index].playerName.name}
+                                                          <img src= {this.state.leftPlayerInfo[index].seasonImg}/> / {this.state.leftPlayerInfo[index].seasonId}/ {this.state.leftPlayerInfo[index].playerName.name}
                                                           <br/>
                                                           포지션: {this.state.matchResult[0].matchInfo[0].player[index].spPosition}/
                                                           강화 등급: <div
