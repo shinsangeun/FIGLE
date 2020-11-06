@@ -100,6 +100,7 @@ class Profile extends React.Component {
       }
   }
 
+    // 선수 포지션(spposition) 메타데이터 조회
     getPositionList = async () => {
         const url = '/fifaonline4/latest/spposition.json';
         const options = {
@@ -121,25 +122,23 @@ class Profile extends React.Component {
         }
     }
 
-    // TODO 선수 포지션(spposition) 메타데이터 조회
+    // 선수 시즌 아이디(seasonId) 메타데이터 조회
     getSppositionList = async () => {
         const proxyurl = "https://cors-anywhere.herokuapp.com/";
         const getSeasonIdDetail = 'https://static.api.nexon.co.kr/fifaonline4/latest/seasonid.json';
 
         axios.get(proxyurl + getSeasonIdDetail).then(response => {
             let data = response.data;
-            console.log("getSppositionList:", data);
             this.setState({
                 seasonResult: data
             });
         })
     }
 
-    // 유저 닉네임으로 유저 레벨 조회
+    // 닉네임으로 유저 레벨 조회
     getMatchLevel1 = async (nickname) => {
         const proxyurl = "https://cors-anywhere.herokuapp.com/";
         const getUserLevel = '/fifaonline4/v1.0/users?nickname=' + nickname;
-        console.log("getMatchLevel1:", nickname);
 
         return axios.get(proxyurl + getUserLevel,{
             headers: {
@@ -147,31 +146,11 @@ class Profile extends React.Component {
             }
         }).then(response => {
             let data = response.data;
-            console.log("data:", data);
             this.setState({
                 level1: data.level
             });
         })
     }
-
-    // 유저 닉네임으로 유저 레벨 조회
-  /*  getMatchLevel2 = async (nickname) => {
-        const proxyurl = "https://cors-anywhere.herokuapp.com/";
-        const getUserLevel = '/fifaonline4/v1.0/users?nickname=' + nickname;
-        console.log("getMatchLevel1:", nickname);
-
-        return axios.get(proxyurl + getUserLevel,{
-            headers: {
-                Authorization: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2NvdW50X2lkIjoiMTIyNDc2MTUyOSIsImF1dGhfaWQiOiIyIiwidG9rZW5fdHlwZSI6IkFjY2Vzc1Rva2VuIiwic2VydmljZV9pZCI6IjQzMDAxMTQ4MSIsIlgtQXBwLVJhdGUtTGltaXQiOiIyMDAwMDoxMCIsIm5iZiI6MTU3NzAwODc3MywiZXhwIjoxNjQwMDgwNzczLCJpYXQiOjE1NzcwMDg3NzN9.Pv1OIow11dye_uv69wnVleR93fa4fDrmup1oTXVuUuo'
-            }
-        }).then(response => {
-            let data = response.data;
-            console.log("data:", data);
-            this.setState({
-                level2: data.level
-            });
-        })
-    }*/
 
     componentWillMount() {
         if (window.Chart) {
@@ -212,16 +191,12 @@ class Profile extends React.Component {
             this.state.leftPlayerListName = leftResult;
 
             let leftPlayerSeasonImg = this.state.seasonResult.filter((element) => {
-                for(let i in this.state.leftPlayerInfo){
-                    if(element.seasonId === parseInt(this.state.leftPlayerInfo[i].seasonId)){
-                        console.log("element.seasonImg:", element.seasonImg);
-                        let seasonImg = element.seasonImg;
-                        return seasonImg;
+                for(let i in leftResult){
+                    if(element.seasonId === parseInt(leftResult[i].id.toString().substring(0, 3))){
+                        return element.seasonImg;
                     }
                 }
             })
-
-            console.log("leftPlayerSeasonImg==>", leftPlayerSeasonImg);
 
             let leftPlayerImageSeasonIdList = [];
 
@@ -229,12 +204,19 @@ class Profile extends React.Component {
             for(let i = 0; i < leftResult.length; i++){
                 let url = 'https://fo4.dn.nexoncdn.co.kr/live/externalAssets/common/players/p' + leftResult[i].id.toString().substring(3,10) + '.png';
                 let seasonId = leftResult[i].id.toString().substring(0, 3);
+
+                // desc, seasonImg 없는 선수들 기본 이미지 표시 필요
+                if(leftPlayerPosition[i] === undefined || leftPlayerSeasonImg[i] === undefined){
+                    leftPlayerPosition[i] = {desc: "none"};
+                    leftPlayerSeasonImg[i] = {seasonImg: "none"};
+                }
+
                 leftPlayerImageSeasonIdList.push({
                     playerName: leftResult[i],
                     url: url,
                     seasonId: seasonId,
-                    leftPlayerPosition: leftPlayerPosition[i]
-                    // seasonImg: leftPlayerSeasonImg
+                    position: leftPlayerPosition[i],
+                    seasonImg: leftPlayerSeasonImg[i]
                 });
             }
             this.state.leftPlayerInfo = leftPlayerImageSeasonIdList;
@@ -242,12 +224,14 @@ class Profile extends React.Component {
 
         //  오른쪽 팀 선수 리스트
         for(let i = 0; i < this.state.matchResult[0].matchInfo[1].player.length; i++) {
-            rightPlayerIdList.push(this.state.matchResult[0].matchInfo[1].player[i].spId);
-            // console.log("rightPlayerIdList: ", rightPlayerIdList);
+            rightPlayerIdList.push({
+                spId: this.state.matchResult[0].matchInfo[1].player[i].spId,
+                spPosition: this.state.matchResult[0].matchInfo[1].player[i].spPosition
+            });
 
             let rightResult = this.state.playerList.filter((element) => {
-                for (let i = 0; i < rightPlayerIdList.length; i++) {
-                    if (element.id === rightPlayerIdList[i]) {
+                for(let i in rightPlayerIdList){
+                    if (element.id === rightPlayerIdList[i].spId) {
                         return element.name;
                     }
                 }
@@ -261,14 +245,15 @@ class Profile extends React.Component {
                 }
             })
 
+            this.state.rightPlayerListName = rightResult;
+
             let rightPlayerSeasonImg = this.state.seasonResult.filter((element) => {
-                for(let i in this.state.rightPlayerInfo){
-                    if(element.seasonId === parseInt(this.state.rightPlayerInfo[i].seasonId)){
+                for(let i in rightResult){
+                    if(element.seasonId === parseInt(rightResult[i].id.toString().substring(0, 3))){
                         return element.seasonImg;
                     }
                 }
             })
-            // console.log("rightPlayerSeasonImg==>", rightPlayerSeasonImg);
 
             let rightPlayerImageSeasonIdList = [];
 
@@ -276,12 +261,19 @@ class Profile extends React.Component {
             for (let i = 0; i < rightResult.length; i++) {
                 let url = 'https://fo4.dn.nexoncdn.co.kr/live/externalAssets/common/players/p' + rightResult[i].id.toString().substring(3, 10) + '.png';
                 let seasonId = rightResult[i].id.toString().substring(0, 3);
+
+                // desc, seasonImg 없는 선수들 기본 이미지 표시 필요
+                if(rightPlayerPosition[i] === undefined || rightPlayerSeasonImg[i] === undefined){
+                    rightPlayerPosition[i] = {desc: "none"};
+                    rightPlayerSeasonImg[i] = {seasonImg: "none"};
+                }
+
                 rightPlayerImageSeasonIdList.push({
                     playerName: rightResult[i],
                     url: url,
                     seasonId: seasonId,
-                    rightPlayerPosition: rightPlayerPosition[i],
-                    seasonImg: rightPlayerSeasonImg
+                    position: rightPlayerPosition[i],
+                    seasonImg: rightPlayerSeasonImg[i]
                 });
             }
             this.state.rightPlayerInfo = rightPlayerImageSeasonIdList;
@@ -424,8 +416,6 @@ class Profile extends React.Component {
             <br/>
         </Container>
 
-          <SeasonList children={this.state.seasonId} />
-
          <br/>
 
         <Container className="mt--3" fluid>
@@ -456,14 +446,15 @@ class Profile extends React.Component {
                                                       <div key={index}>
                                                           <img alt="..." className="rounded-circle"
                                                                src={this.state.leftPlayerInfo[index].url}/>
-                                                               {/*TODO 시즌 아이디 이미지 필요*/}
-                                                          <img src= {this.state.leftPlayerInfo[index].seasonImg}/> / {this.state.leftPlayerInfo[index].seasonId}/ {this.state.leftPlayerInfo[index].playerName.name}
+                                                          <img src= {this.state.leftPlayerInfo[index].seasonImg.seasonImg}/> {this.state.leftPlayerInfo[index].playerName.name}
                                                           <br/>
-                                                          포지션: {this.state.matchResult[0].matchInfo[0].player[index].spPosition}/
-                                                          강화 등급: <div
-                                                          className="btn btn-primary btn-sm">{this.state.matchResult[0].matchInfo[0].player[index].spGrade}</div>
-                                                          / 선수 평점: <div
-                                                          className="btn btn-primary btn-sm">{this.state.matchResult[0].matchInfo[0].player[index].status.spRating}</div>
+                                                          포지션: {this.state.leftPlayerInfo[index].position.desc} /
+                                                          강화 등급: <div className="btn btn-primary btn-sm">
+                                                              {this.state.matchResult[0].matchInfo[0].player[index].spGrade}
+                                                          </div> /
+                                                          선수 평점: <div className="btn btn-primary btn-sm">
+                                                                {this.state.matchResult[0].matchInfo[0].player[index].status.spRating}
+                                                          </div>
 
                                                           <Table>
                                                               <tbody>
@@ -539,12 +530,17 @@ class Profile extends React.Component {
                                                   {this.state.rightPlayerInfo.map((image, index) => {
                                                       return (
                                                           <div key={index}>
-                                                              <img alt="..." className="rounded-circle" src={this.state.rightPlayerInfo[index].url}/>
-                                                              {/*TODO 시즌 아이디 이미지 필요*/}
-                                                              {this.state.rightPlayerInfo[index].seasonId} / {this.state.rightPlayerInfo[index].playerName.name} <br/>
-                                                              포지션: {this.state.matchResult[0].matchInfo[1].player[index].spPosition}/
-                                                              강화 등급: <div className="btn btn-primary btn-sm">{this.state.matchResult[0].matchInfo[1].player[index].spGrade}</div>
-                                                              / 선수 평점: <div className="btn btn-primary btn-sm">{this.state.matchResult[0].matchInfo[1].player[index].status.spRating}</div> <br/>
+                                                              <img alt="..." className="rounded-circle"
+                                                                   src={this.state.rightPlayerInfo[index].url}/>
+                                                              <img src= {this.state.rightPlayerInfo[index].seasonImg.seasonImg}/> {this.state.rightPlayerInfo[index].playerName.name}
+                                                              <br/>
+                                                              포지션: {this.state.rightPlayerInfo[index].position.desc} /
+                                                              강화 등급: <div className="btn btn-primary btn-sm">
+                                                                    {this.state.matchResult[0].matchInfo[1].player[index].spGrade}
+                                                              </div> /
+                                                              선수 평점: <div className="btn btn-primary btn-sm">
+                                                                    {this.state.matchResult[0].matchInfo[1].player[index].status.spRating}
+                                                              </div>
 
                                                               <Table>
                                                                   <tbody>
