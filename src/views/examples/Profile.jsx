@@ -17,8 +17,6 @@ import {
 // core components
 import UserHeader from "components/Headers/UserHeader.jsx";
 import PlayerList from "components/Data/PlayerList.jsx";
-import SeasonList from "../../components/Data/SeasonList";
-import {Bar, Line} from "react-chartjs-2";
 import Chart from "chart.js";
 // core components
 import {
@@ -70,8 +68,8 @@ class Profile extends React.Component {
       }).then(response => {
         matchResultArray.push(response.data);
         this.setState({
-          matchResult: matchResultArray,
-          isLoading: false
+            matchResult: matchResultArray,
+            isLoading: false
         })
       })
     }catch(error){
@@ -342,7 +340,6 @@ class Profile extends React.Component {
                     </div>
                   </Row>
                   <div className="text-center">
-                      <Button onClick={this.getMatchLevel1(this.state.matchResult[0].matchInfo[0].nickname)}>Lv: {this.state.level1} / {this.state.matchResult[0].matchInfo[0].nickname}</Button>
                       <h3>{this.state.matchResult[0].matchInfo[0].nickname}</h3>
                   </div>
                 </CardBody>
@@ -405,7 +402,6 @@ class Profile extends React.Component {
                               </div>
                           </Row>
                           <div className="text-center">
-                             {/* <Button onClick={this.getMatchLevel2(this.state.matchResult[0].matchInfo[1].nickname)}>Lv: {this.state.level2} / {this.state.matchResult[0].matchInfo[1].nickname}</Button>*/}
                               <h3>{this.state.matchResult[0].matchInfo[1].nickname}</h3>
                           </div>
                       </CardBody>
@@ -482,7 +478,7 @@ class Profile extends React.Component {
                                                           </Table>
 
                                                           {/* TODO 선수 차트 필요 */}
-                                                          {/* <Card className="bg-gradient-default shadow card">
+                                                           {/*<Card className="bg-gradient-default shadow card">
                                                               <CardBody>
                                                                   <div className="row">
                                                                       <Line
