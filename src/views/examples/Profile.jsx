@@ -59,12 +59,14 @@ class Profile extends React.Component {
 
     console.log("MatchId:", MatchId);
 
-    const proxyurl = "https://cors-anywhere.herokuapp.com/";
+    const proxyUrl = "https://cors-anywhere.herokuapp.com/";
     let getMatchIdDetail = 'https://api.nexon.co.kr/fifaonline4/v1.0/matches/' + MatchId;
     try{
-        axios.get(proxyurl + getMatchIdDetail, {
+        axios.get(proxyUrl + getMatchIdDetail, {
         // 헤더 값 : 권한 시리얼 정보
-        headers: {Authorization: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2NvdW50X2lkIjoiMTIyNDc2MTUyOSIsImF1dGhfaWQiOiIyIiwidG9rZW5fdHlwZSI6IkFjY2Vzc1Rva2VuIiwic2VydmljZV9pZCI6IjQzMDAxMTQ4MSIsIlgtQXBwLVJhdGUtTGltaXQiOiIyMDAwMDoxMCIsIm5iZiI6MTU3NzAwODc3MywiZXhwIjoxNjQwMDgwNzczLCJpYXQiOjE1NzcwMDg3NzN9.Pv1OIow11dye_uv69wnVleR93fa4fDrmup1oTXVuUuo'}
+        headers: {
+            Authorization: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2NvdW50X2lkIjoiMTIyNDc2MTUyOSIsImF1dGhfaWQiOiIyIiwidG9rZW5fdHlwZSI6IkFjY2Vzc1Rva2VuIiwic2VydmljZV9pZCI6IjQzMDAxMTQ4MSIsIlgtQXBwLVJhdGUtTGltaXQiOiIyMDAwMDoxMCIsIm5iZiI6MTU3NzAwODc3MywiZXhwIjoxNjQwMDgwNzczLCJpYXQiOjE1NzcwMDg3NzN9.Pv1OIow11dye_uv69wnVleR93fa4fDrmup1oTXVuUuo'
+        }
       }).then(response => {
         matchResultArray.push(response.data);
         this.setState({
@@ -122,10 +124,10 @@ class Profile extends React.Component {
 
     // 선수 시즌 아이디(seasonId) 메타데이터 조회
     getSppositionList = async () => {
-        const proxyurl = "https://cors-anywhere.herokuapp.com/";
+        const proxyUrl = "https://cors-anywhere.herokuapp.com/";
         const getSeasonIdDetail = 'https://static.api.nexon.co.kr/fifaonline4/latest/seasonid.json';
 
-        axios.get(proxyurl + getSeasonIdDetail).then(response => {
+        axios.get(proxyUrl + getSeasonIdDetail).then(response => {
             let data = response.data;
             this.setState({
                 seasonResult: data
@@ -199,9 +201,19 @@ class Profile extends React.Component {
             let leftPlayerImageSeasonIdList = [];
 
             // 왼쪽 팀 선수 이미지 조회 url & 시즌 아이디
+            let leftSpIdList = [];
+
             for(let i = 0; i < leftResult.length; i++){
-                let url = 'https://fo4.dn.nexoncdn.co.kr/live/externalAssets/common/players/p' + leftResult[i].id.toString().substring(3,10) + '.png';
+                let spId = leftResult[i].id.toString().substring(3,10);
+                if(spId.charAt(0) === "0"){
+                    leftSpIdList.push(spId.substr(1,5));
+                }else{
+                    leftSpIdList.push(spId);
+                }
+
                 let seasonId = leftResult[i].id.toString().substring(0, 3);
+
+                let url = 'https://fo4.dn.nexoncdn.co.kr/live/externalAssets/common/players/p' + spIdList[i] + '.png';
 
                 // desc, seasonImg 없는 선수들 기본 이미지 표시 필요
                 if(leftPlayerPosition[i] === undefined || leftPlayerSeasonImg[i] === undefined){
@@ -256,9 +268,20 @@ class Profile extends React.Component {
             let rightPlayerImageSeasonIdList = [];
 
             // 오른쪽 팀 선수 이미지 조회 url & 시즌 아이디
+            let rightSpIdList = [];
+
             for (let i = 0; i < rightResult.length; i++) {
-                let url = 'https://fo4.dn.nexoncdn.co.kr/live/externalAssets/common/players/p' + rightResult[i].id.toString().substring(3, 10) + '.png';
+                let spId = rightResult[i].id.toString().substring(3, 10);
+                if(spId.charAt(0) === "0"){
+                    rightSpIdList.push(spId.substr(1,5));
+                }else{
+                    rightSpIdList.push(spId);
+                }
+
                 let seasonId = rightResult[i].id.toString().substring(0, 3);
+
+                let url = 'https://fo4.dn.nexoncdn.co.kr/live/externalAssets/common/players/p' + rightSpIdList[i] + '.png';
+
 
                 // desc, seasonImg 없는 선수들 기본 이미지 표시 필요
                 if(rightPlayerPosition[i] === undefined || rightPlayerSeasonImg[i] === undefined){
