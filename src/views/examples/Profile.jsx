@@ -136,7 +136,7 @@ class Profile extends React.Component {
     }
 
     // 닉네임으로 유저 레벨 조회
-    getMatchLevel1 = async (nickname) => {
+   /* getMatchLevel1 = async (nickname) => {
         const proxyurl = "https://cors-anywhere.herokuapp.com/";
         const getUserLevel = '/fifaonline4/v1.0/users?nickname=' + nickname;
 
@@ -150,7 +150,7 @@ class Profile extends React.Component {
                 level1: data.level
             });
         })
-    }
+    }*/
 
     componentWillMount() {
         if (window.Chart) {
@@ -205,6 +205,8 @@ class Profile extends React.Component {
 
             for(let i = 0; i < leftResult.length; i++){
                 let spId = leftResult[i].id.toString().substring(3,10);
+
+                // TODO 2번째 자리수가 0일때 케이스 추가
                 if(spId.charAt(0) === "0"){
                     leftSpIdList.push(spId.substr(1,5));
                 }else{
@@ -213,7 +215,7 @@ class Profile extends React.Component {
 
                 let seasonId = leftResult[i].id.toString().substring(0, 3);
 
-                let url = 'https://fo4.dn.nexoncdn.co.kr/live/externalAssets/common/players/p' + spIdList[i] + '.png';
+                let url = 'https://fo4.dn.nexoncdn.co.kr/live/externalAssets/common/players/p' + leftSpIdList[i] + '.png';
 
                 // desc, seasonImg 없는 선수들 기본 이미지 표시 필요
                 if(leftPlayerPosition[i] === undefined || leftPlayerSeasonImg[i] === undefined){
@@ -272,6 +274,7 @@ class Profile extends React.Component {
 
             for (let i = 0; i < rightResult.length; i++) {
                 let spId = rightResult[i].id.toString().substring(3, 10);
+                // TODO 2번째 자리수가 0일때 케이스 추가
                 if(spId.charAt(0) === "0"){
                     rightSpIdList.push(spId.substr(1,5));
                 }else{
