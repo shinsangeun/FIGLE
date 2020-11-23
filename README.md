@@ -20,16 +20,30 @@
 6. [WEB Manager]는 요청한 결과 값을 업데이트한다 (UI 갱신)
 7. 종료
 
+
 ### 실행 방법:
 1. ```npm install```
 2. pacakge.json의 start 실행 
    ```react-scripts start``` 또는 npm start
 
+
 ### 출처:
 - 템플릿 출처: https://www.creative-tim.com/product/argon-dashboard-react#
 
-학습 참고 사이트
 
-http://wiki.sys4u.co.kr/pages/viewpage.action?pageId=8553032
-https://medium.com/@ca3rot/%EB%A6%AC%EC%95%A1%ED%8A%B8-%EB%9D%BC%EC%9A%B0%ED%84%B0%EA%B0%80-%EA%B5%90%ED%99%98%EC%9B%90%EC%9D%B4%EB%9D%BC%EB%A9%B4-71ccdd296fc4
-https://medium.com/the-andela-way/understanding-the-fundamentals-of-routing-in-react-b29f806b157e 
+### 학습 참고 사이트:
+- http://wiki.sys4u.co.kr/pages/viewpage.action?pageId=8553032
+- https://medium.com/@ca3rot/%EB%A6%AC%EC%95%A1%ED%8A%B8-%EB%9D%BC%EC%9A%B0%ED%84%B0%EA%B0%80-%EA%B5%90%ED%99%98%EC%9B%90%EC%9D%B4%EB%9D%BC%EB%A9%B4-71ccdd296fc4
+- https://medium.com/the-andela-way/understanding-the-fundamentals-of-routing-in-react-b29f806b157e 
+
+--- 
+### 스크린샷:
+- 유저 아이디 검색
+![search](/Images/search.png)
+
+- 유저 아이디 게임 목록 조회
+
+
+- 게임 상세 조회
+
+
