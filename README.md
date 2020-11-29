@@ -38,12 +38,13 @@
 
 --- 
 ### 스크린샷:
-- 유저 아이디 검색
+1. 유저 아이디 검색
 ![search](/Images/search.png)
 
-- 유저 아이디 게임 목록 조회
+2. 유저 아이디 게임 목록 조회
+![list](/Images/list.png)
 
-
-- 게임 상세 조회
+3. 게임 내역 상세 조회
+![profile](/Images/profile.png)
 
 
