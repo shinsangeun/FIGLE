@@ -16,7 +16,6 @@ import {
 } from "reactstrap";
 // core components
 import UserHeader from "components/Headers/UserHeader.jsx";
-import PlayerList from "components/Data/PlayerList.jsx";
 import Chart from "chart.js";
 // core components
 import {
@@ -135,23 +134,6 @@ class Profile extends React.Component {
         })
     }
 
-    // 닉네임으로 유저 레벨 조회
-   /* getMatchLevel1 = async (nickname) => {
-        const proxyurl = "https://cors-anywhere.herokuapp.com/";
-        const getUserLevel = '/fifaonline4/v1.0/users?nickname=' + nickname;
-
-        return axios.get(proxyurl + getUserLevel,{
-            headers: {
-                Authorization: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2NvdW50X2lkIjoiMTIyNDc2MTUyOSIsImF1dGhfaWQiOiIyIiwidG9rZW5fdHlwZSI6IkFjY2Vzc1Rva2VuIiwic2VydmljZV9pZCI6IjQzMDAxMTQ4MSIsIlgtQXBwLVJhdGUtTGltaXQiOiIyMDAwMDoxMCIsIm5iZiI6MTU3NzAwODc3MywiZXhwIjoxNjQwMDgwNzczLCJpYXQiOjE1NzcwMDg3NzN9.Pv1OIow11dye_uv69wnVleR93fa4fDrmup1oTXVuUuo'
-            }
-        }).then(response => {
-            let data = response.data;
-            this.setState({
-                level1: data.level
-            });
-        })
-    }*/
-
     componentWillMount() {
         if (window.Chart) {
             parseOptions(Chart, chartOptions());
@@ -205,23 +187,17 @@ class Profile extends React.Component {
 
             for(let i = 0; i < leftResult.length; i++){
                 let spId = leftResult[i].id.toString().substring(3,10);
+                leftSpIdList.push(parseInt(spId));
 
-                // TODO 2번째 자리수가 0일때 케이스 추가
-                if(spId.charAt(0) === "0"){
-                    leftSpIdList.push(spId.substr(1,5));
-                }else{
-                    leftSpIdList.push(spId);
-                }
-
-                let seasonId = leftResult[i].id.toString().substring(0, 3);
-
-                let url = 'https://fo4.dn.nexoncdn.co.kr/live/externalAssets/common/players/p' + leftSpIdList[i] + '.png';
+                let url = 'https://fo4.dn.nexoncdn.co.kr/live/externalAssets/common/players/p' + leftSpIdList[i].toString() + '.png';
 
                 // desc, seasonImg 없는 선수들 기본 이미지 표시 필요
                 if(leftPlayerPosition[i] === undefined || leftPlayerSeasonImg[i] === undefined){
                     leftPlayerPosition[i] = {desc: "none"};
                     leftPlayerSeasonImg[i] = {seasonImg: "none"};
                 }
+
+                let seasonId = leftResult[i].id.toString().substring(0, 3);
 
                 leftPlayerImageSeasonIdList.push({
                     playerName: leftResult[i],
@@ -274,23 +250,17 @@ class Profile extends React.Component {
 
             for (let i = 0; i < rightResult.length; i++) {
                 let spId = rightResult[i].id.toString().substring(3, 10);
-                // TODO 2번째 자리수가 0일때 케이스 추가
-                if(spId.charAt(0) === "0"){
-                    rightSpIdList.push(spId.substr(1,5));
-                }else{
-                    rightSpIdList.push(spId);
-                }
+                rightSpIdList.push(parseInt(spId));
 
-                let seasonId = rightResult[i].id.toString().substring(0, 3);
-
-                let url = 'https://fo4.dn.nexoncdn.co.kr/live/externalAssets/common/players/p' + rightSpIdList[i] + '.png';
-
+                let url = 'https://fo4.dn.nexoncdn.co.kr/live/externalAssets/common/players/p' + rightSpIdList[i].toString() + '.png';
 
                 // desc, seasonImg 없는 선수들 기본 이미지 표시 필요
                 if(rightPlayerPosition[i] === undefined || rightPlayerSeasonImg[i] === undefined){
                     rightPlayerPosition[i] = {desc: "none"};
                     rightPlayerSeasonImg[i] = {seasonImg: "none"};
                 }
+
+                let seasonId = rightResult[i].id.toString().substring(0, 3);
 
                 rightPlayerImageSeasonIdList.push({
                     playerName: rightResult[i],
