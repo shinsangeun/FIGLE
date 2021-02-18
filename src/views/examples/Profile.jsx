@@ -61,7 +61,7 @@ class Profile extends React.Component {
     const proxyUrl = "https://cors-anywhere.herokuapp.com/";
     let getMatchIdDetail = 'https://api.nexon.co.kr/fifaonline4/v1.0/matches/' + MatchId;
     try{
-        axios.get(proxyUrl + getMatchIdDetail, {
+        axios.get(getMatchIdDetail, {
         // 헤더 값 : 권한 시리얼 정보
         headers: {
             Authorization: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2NvdW50X2lkIjoiMTIyNDc2MTUyOSIsImF1dGhfaWQiOiIyIiwidG9rZW5fdHlwZSI6IkFjY2Vzc1Rva2VuIiwic2VydmljZV9pZCI6IjQzMDAxMTQ4MSIsIlgtQXBwLVJhdGUtTGltaXQiOiIyMDAwMDoxMCIsIm5iZiI6MTU3NzAwODc3MywiZXhwIjoxNjQwMDgwNzczLCJpYXQiOjE1NzcwMDg3NzN9.Pv1OIow11dye_uv69wnVleR93fa4fDrmup1oTXVuUuo'
@@ -69,8 +69,7 @@ class Profile extends React.Component {
       }).then(response => {
         matchResultArray.push(response.data);
         this.setState({
-            matchResult: matchResultArray,
-            isLoading: false
+            matchResult: matchResultArray
         })
       })
     }catch(error){
@@ -126,10 +125,11 @@ class Profile extends React.Component {
         const proxyUrl = "https://cors-anywhere.herokuapp.com/";
         const getSeasonIdDetail = 'https://static.api.nexon.co.kr/fifaonline4/latest/seasonid.json';
 
-        axios.get(proxyUrl + getSeasonIdDetail).then(response => {
+        axios.get(getSeasonIdDetail).then(response => {
             let data = response.data;
             this.setState({
-                seasonResult: data
+                seasonResult: data,
+                isLoading: false
             });
         })
     }

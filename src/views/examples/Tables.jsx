@@ -53,7 +53,7 @@ class Tables extends React.Component {
     const proxyurl = "https://cors-anywhere.herokuapp.com/";
     let getMatchIdList = 'https://api.nexon.co.kr/fifaonline4/v1.0/users/' + accessId + '/matches?matchtype=' + matchtype + '&offset=' + offset +'&limit=' + limit;
     try{
-        return axios.get(proxyurl + getMatchIdList, {
+        return axios.get(getMatchIdList, {
             // 헤더 값 : 권한 시리얼 정보
             headers : { Authorization : 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2NvdW50X2lkIjoiMTYxMTI5MjUyMiIsImF1dGhfaWQiOiIyIiwidG9rZW5fdHlwZSI6IkFjY2Vzc1Rva2VuIiwic2VydmljZV9pZCI6IjQzMDAxMTQ4MSIsIlgtQXBwLVJhdGUtTGltaXQiOiIyMDAwMDoxMCIsIm5iZiI6MTU3Njk5MzA4MiwiZXhwIjoxNjQwMDY1MDgyLCJpYXQiOjE1NzY5OTMwODJ9.VzsQriixSpYA7CbsWT6RQYvigb5Y9oIzVxikvLgTcRI'}
         }).then(response =>
@@ -79,7 +79,7 @@ class Tables extends React.Component {
         const proxyurl = "https://cors-anywhere.herokuapp.com/";
         let getMatchIdDetail = 'https://api.nexon.co.kr/fifaonline4/v1.0/matches/' + MatchIdList[i];
         try{
-          axios.get(proxyurl + getMatchIdDetail, {
+          axios.get(getMatchIdDetail, {
             // 헤더 값 : 권한 시리얼 정보
             headers: {
               Authorization: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2NvdW50X2lkIjoiMTIyNDc2MTUyOSIsImF1dGhfaWQiOiIyIiwidG9rZW5fdHlwZSI6IkFjY2Vzc1Rva2VuIiwic2VydmljZV9pZCI6IjQzMDAxMTQ4MSIsIlgtQXBwLVJhdGUtTGltaXQiOiIyMDAwMDoxMCIsIm5iZiI6MTU3NzAwODc3MywiZXhwIjoxNjQwMDgwNzczLCJpYXQiOjE1NzcwMDg3NzN9.Pv1OIow11dye_uv69wnVleR93fa4fDrmup1oTXVuUuo'
@@ -100,14 +100,16 @@ class Tables extends React.Component {
 
   // 경기 결과 버튼 색깔
   handleButton = (matchResult) => {
+    let bg_color;
+
     if(matchResult === "승"){
-      let bg_color = "success";
+      bg_color = "success";
       return bg_color;
     }else if(matchResult === "패"){
-      let bg_color = "warning";
+      bg_color = "warning";
       return bg_color;
     }else if(matchResult === "무"){
-      let bg_color = "secondary";
+      bg_color = "secondary";
       return bg_color;
     }
   };
@@ -123,6 +125,34 @@ class Tables extends React.Component {
         return dateA < dateB ? 1 : -1;
       }
       this.state.matchResult.sort(date_ascending);
+
+      // 아이디와 같은지 체크
+      console.log("this.state.accessId:", this.state.accessId);
+      console.log("nickname:", this.state.matchResult);
+
+    /*  // TODO 승패무 확률 추가 필요
+      if(this.state.matchResult !== null){
+        if(this.state.accessId === this.state.matchResult.matchInfo[0].nickname){
+          let success = 0;
+          let loss = 0;
+          let draw = 0;
+
+          if(matchResult === "승"){
+            success += 1;
+            console.log("success:",success);
+            return success;
+          }else if(matchResult === "패"){
+            loss += 1;
+            console.log("loss:",loss);
+            return loss;
+          }else if(matchResult === "무"){
+            draw += 1;
+            console.log("draw:",draw);
+            return draw;
+          }
+
+        }
+      }*/
     }
 
     return (

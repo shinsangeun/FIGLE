@@ -49,12 +49,11 @@ class Auth extends React.Component {
     let req_message = 'https://api.nexon.co.kr/fifaonline4/v1.0/users?nickname=' + nickname;
 
     try{
-      return await axios.get(proxyurl + req_message, {
+      return await axios.get(req_message, {
         // 헤더 값 : 권한 시리얼 정보
         headers : { Authorization : 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2NvdW50X2lkIjoiMTIyNDc2MTUyOSIsImF1dGhfaWQiOiIyIiwidG9rZW5fdHlwZSI6IkFjY2Vzc1Rva2VuIiwic2VydmljZV9pZCI6IjQzMDAxMTQ4MSIsIlgtQXBwLVJhdGUtTGltaXQiOiIyMDAwMDoxMCIsIm5iZiI6MTU3NzAwODc3MywiZXhwIjoxNjQwMDgwNzczLCJpYXQiOjE1NzcwMDg3NzN9.Pv1OIow11dye_uv69wnVleR93fa4fDrmup1oTXVuUuo'}
       }).then(response => {
         console.log("code:", response.status);
-        console.log("message: ", response);
 
         if(response.status === 200){
           this.setState({
