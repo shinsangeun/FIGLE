@@ -33,43 +33,35 @@
     "not op_mini all"
   ],
   "dependencies": {
-    "axios": "^0.19.1",
-    "chart.js": "^2.7.3",
+    "axios": "^0.19.2",
+    "chart.js": "^2.9.3",
+    "cheerio": "^1.0.0-rc.3",
     "classnames": "^2.2.6",
     "cors": "^2.8.5",
     "express": "^4.17.1",
     "moment": "2.24.0",
     "mysql": "^2.18.1",
-    "node-sass": "^4.13.0",
+    "node-sass": "^4.14.1",
     "nouislider": "13.1.1",
-    "query-string": "^6.12.0",
-    "react": "^16.8.4",
-    "react-chartjs-2": "^2.7.4",
-    "react-copy-to-clipboard": "^5.0.1",
+    "query-string": "^6.13.5",
+    "react": "^16.13.1",
+    "react-chartjs-2": "^2.10.0",
+    "react-copy-to-clipboard": "^5.0.2",
     "react-datetime": "^2.16.3",
     "react-dom": "16.8.4",
     "react-google-maps": "^9.4.5",
     "react-router-dom": "4.3.1",
     "react-scripts": "2.1.8",
     "reactstrap": "^7.1.0",
+    "sanitize-html": "^2.1.2",
     "source-map": "^0.7.3",
-    "websocket": "^1.0.31"
+    "websocket": "^1.0.32",
+    "pm2": "^4.5.4"
   },
   "devDependencies": {
     "@types/googlemaps": "3.30.18",
     "@types/markerclustererplus": "2.1.33",
     "@types/react": "16.8.7",
     "typescript": "3.3.3333"
-  },
-  "description": "1. 사용자 정보 검색\r 2. 매치 기록 검색",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/gksthf2271/FIGLE.git"
-  },
-  "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/gksthf2271/FIGLE/issues"
-  },
-  "homepage": "https://github.com/gksthf2271/FIGLE#readme"
+  }
 }
