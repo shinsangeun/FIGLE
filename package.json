@@ -38,6 +38,7 @@
     "classnames": "^2.2.6",
     "cors": "^2.8.5",
     "express": "^4.17.1",
+    "heroku": "^7.50.0",
     "moment": "2.24.0",
     "mysql": "^2.18.1",
     "node-sass": "^4.13.0",
@@ -71,5 +72,8 @@
   "bugs": {
     "url": "https://github.com/gksthf2271/FIGLE/issues"
   },
-  "homepage": "https://github.com/gksthf2271/FIGLE#readme"
+  "homepage": "https://github.com/gksthf2271/FIGLE#readme",
+  "engines": {
+    "node": "14.x"
+  }
 }
