@@ -1,10 +1,10 @@
 import React from "react";
-import { Route, Link } from 'react-router-dom';
+import { Route, Link, HashRouter } from 'react-router-dom';
+import ReactDOM from 'react-dom';
 
 // reactstrap components
 import { Card, CardBody, CardTitle, Container, Row, Col } from "reactstrap";
 import axios from "axios";
-import { HashRouter } from 'react-router-dom'
 
 class Header extends React.Component {
   constructor(props) {
@@ -25,7 +25,7 @@ class Header extends React.Component {
   _getMatchIdList = () => {
     ReactDOM.render(
         <HashRouter>
-          <Route path='' component={App}/>
+          <Route path=''/>
         </HashRouter>,
         document.getElementById('search'));
 
