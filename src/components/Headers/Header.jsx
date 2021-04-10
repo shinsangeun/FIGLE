@@ -17,18 +17,12 @@ class Header extends React.Component {
   }
 
   componentDidMount= async () => {
-    await this._getMatchIdList();
-    await this._getMatchIdDetail();
+    // await this._getMatchIdList();
+    // await this._getMatchIdDetail();
   };
 
   // 유저 닉네임으로 유저 정보 조회
   _getMatchIdList = () => {
-    ReactDOM.render(
-        <HashRouter>
-          <Route path=''/>
-        </HashRouter>,
-        document.getElementById('search'));
-
     const search = this.props.location.search;
     console.log("search:", search);
     const params = new URLSearchParams(search);

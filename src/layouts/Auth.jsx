@@ -1,13 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { Route, Switch } from "react-router-dom";
 // reactstrap components
-import {Container, Row, Col, Form, InputGroup, Input, InputGroupAddon, InputGroupText, Collapse, Button} from "reactstrap";
+import {Container, Row, Col, Button} from "reactstrap";
 
 // core components
 import AuthNavbar from "components/Navbars/AuthNavbar.jsx";
 import AuthFooter from "components/Footers/AuthFooter.jsx";
 import routes from "routes.js";
-import axios from "axios";
 
 class Auth extends React.Component {
   getRoutes = routes => {
@@ -29,9 +28,7 @@ class Auth extends React.Component {
   constructor(props) {
     super(props);
     this.state ={
-      nickname:'',  //닉네임
-      accessId:'',  //아이디 시리얼 넘버
-      level:0,      //레벨
+      nickname:''
     };
   }
 
@@ -39,38 +36,7 @@ class Auth extends React.Component {
     this.setState({
       nickname: e.target.value
     });
-    console.log("e:", e.target.value);
-  };
-
-   async getUserId(nickname){
-    console.log("nickname:", nickname);
-
-    const proxyurl = "https://cors-anywhere.herokuapp.com/";
-    let req_message = 'https://api.nexon.co.kr/fifaonline4/v1.0/users?nickname=' + nickname;
-
-    try{
-      return await axios.get(req_message, {
-        // 헤더 값 : 권한 시리얼 정보
-        headers : { Authorization : 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2NvdW50X2lkIjoiMTIyNDc2MTUyOSIsImF1dGhfaWQiOiIyIiwidG9rZW5fdHlwZSI6IkFjY2Vzc1Rva2VuIiwic2VydmljZV9pZCI6IjQzMDAxMTQ4MSIsIlgtQXBwLVJhdGUtTGltaXQiOiIyMDAwMDoxMCIsIm5iZiI6MTU3NzAwODc3MywiZXhwIjoxNjQwMDgwNzczLCJpYXQiOjE1NzcwMDg3NzN9.Pv1OIow11dye_uv69wnVleR93fa4fDrmup1oTXVuUuo'}
-      }).then(response => {
-        console.log("code:", response.status);
-
-        if(response.status === 200){
-          this.setState({
-            nickname : response.data.nickname,
-            accessId : response.data.accessId,
-            level : response.data.level
-          })
-        }else{
-          alert("해당 닉네임의 유저가 없습니다.")
-        }
-      })
-    }catch (error){
-      console.log(error)
-     // if(error.response.status === 404){
-      //  alert("해당 닉네임의 유저가 없습니다.")
-      //}
-    }
+    console.log("검색어:", e.target.value);
   };
 
   render() {
@@ -108,7 +74,7 @@ class Auth extends React.Component {
                            onChange={this.handleChange}
                     >
                     </input>
-                    <Button onClick={this.getUserId(this.state.nickname)} type="submit" href={`/admin/tables/users?accessId=${this.state.accessId}`}>검색</Button>
+                    <Button type="submit" href={`/admin/tables/users?nickname=${this.state.nickname}`}>검색</Button>
                   </div>
                 </div>
               </form>
