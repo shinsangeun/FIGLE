@@ -25,17 +25,24 @@ import {
     chartExample2
 } from "variables/charts.jsx";
 
+const options = {
+    method: 'GET',
+    headers: {
+        "Access-Control-Allow-Origin": "*",
+        "Accept": "*/*",
+        "Host": "static.api.nexon.co.kr",
+        "Connection":"keep-alive"
+    }
+};
+
 class Profile extends React.Component {
   constructor(props) {
     super(props);
       this.state ={
-          nickname:'',                      //닉네임
-          accessId:'',                      //아이디 시리얼 넘버
           matchResult: '',
           isLoading: true,
           playerList: '',
           positionList: '',
-          id: '',
           leftPlayerInfo: '',            // 왼쪽 팀 선수 정보
           rightPlayerInfo: '',            // 오른쪽 팀 선수 정보
           chartExample1Data: "data1",
@@ -79,15 +86,6 @@ class Profile extends React.Component {
 
   getPlayerList = async () => {
       const url = '/fifaonline4/latest/spid.json';
-      const options = {
-          method: 'GET',
-          headers: {
-              "Access-Control-Allow-Origin": "*",
-              "Accept": "*/*",
-              "Host": "static.api.nexon.co.kr",
-              "Connection":"keep-alive"
-          }
-      };
       let response = await fetch(url, options);
       let responseOK = response && response.ok;
       if(responseOK){
@@ -101,15 +99,6 @@ class Profile extends React.Component {
     // 선수 포지션(spposition) 메타데이터 조회
     getPositionList = async () => {
         const url = '/fifaonline4/latest/spposition.json';
-        const options = {
-            method: 'GET',
-            headers: {
-                "Access-Control-Allow-Origin": "*",
-                "Accept": "*/*",
-                "Host": "static.api.nexon.co.kr",
-                "Connection":"keep-alive"
-            }
-        };
         let response = await fetch(url, options);
         let responseOK = response && response.ok;
         if(responseOK){
@@ -123,7 +112,7 @@ class Profile extends React.Component {
     // 선수 시즌 아이디(seasonId) 메타데이터 조회
     getSppositionList = async () => {
         const proxyUrl = "https://cors-anywhere.herokuapp.com/";
-        const getSeasonIdDetail = 'https://static.api.nexon.co.kr/fifaonline4/latest/seasonid.json';
+        const getSeasonIdDetail = '/fifaonline4/latest/seasonid.json';
 
         axios.get(getSeasonIdDetail).then(response => {
             let data = response.data;
