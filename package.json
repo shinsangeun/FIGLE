@@ -13,7 +13,7 @@
     "argon-dashboard-react"
   ],
   "scripts": {
-    "start": "NODE_PATH=./src react-scripts start",
+    "start": "react-scripts start",
     "build": "NODE_PATH=./src react-scripts build",
     "test": "NODE_PATH=./src react-scripts test",
     "eject": "NODE_PATH=./src react-scripts eject",
