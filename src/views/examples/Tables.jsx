@@ -2,157 +2,157 @@ import React from "react";
 
 // reactstrap components
 import {
-  Badge,
   Card,
   CardHeader,
   CardFooter,
-  DropdownMenu,
-  DropdownItem,
-  UncontrolledDropdown,
-  DropdownToggle,
-  Media,
   Pagination,
   PaginationItem,
   PaginationLink,
-  Progress,
   Table,
   Container,
   Row,
-  UncontrolledTooltip, Button
+  Button
 } from "reactstrap";
 // core components
 import Header from "components/Headers/Header.jsx";
 import axios from "axios";
+import GetAccessId from "../../components/Data/GetAccessId";
+
+const API_KEY ='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2NvdW50X2lkIjoiMTIyNDc2MTUyOSIsImF1dGhfaWQiOiIyIiwidG9rZW5fdHlwZSI6IkFjY2Vzc1Rva2VuIiwic2VydmljZV9pZCI6IjQzMDAxMTQ4MSIsIlgtQXBwLVJhdGUtTGltaXQiOiIyMDAwMDoxMCIsIm5iZiI6MTU3NzAwODc3MywiZXhwIjoxNjQwMDgwNzczLCJpYXQiOjE1NzcwMDg3NzN9.Pv1OIow11dye_uv69wnVleR93fa4fDrmup1oTXVuUuo';
 
 class Tables extends React.Component {
   constructor(props) {
     super(props);
     this.state ={
-      accessId:'',
+      nickname: '',
+      accessId: '',
       isLoading: true,
-      matchIdList:'',
-      matchResult:[],
+      matchIdList: [],
+      matchResult: [],
       activePage:''
     };
   }
 
-  componentDidMount= async () => {
+  componentDidMount = async () => {
+      await this._getAccessId();
       await this._getMatchIdList();
       await this._getMatchIdDetail();
   };
 
-  // 유저 닉네임으로 유저 정보 조회
-  _getMatchIdList = () => {
+  _getAccessId = async () => {
     const search = this.props.location.search;
     const params = new URLSearchParams(search);
-    const accessId = params.get("accessId");
+    const nickname = params.get("nickname");
+
+    let req_message = 'https://api.nexon.co.kr/fifaonline4/v1.0/users?nickname=' + nickname;
+
+    try{
+      return await axios.get(req_message, {
+        // 헤더 값 : 권한 시리얼 정보
+        headers : { Authorization : API_KEY }
+      }).then(response => {
+        if(response.status === 200){
+          this.setState({
+            nickname : response.data.nickname,
+            accessId : response.data.accessId,
+            level : response.data.level
+          })
+        }else if(response.status === 404 || response.status === 500){
+          alert("해당 닉네임의 유저가 없습니다.")
+        }
+      })
+    }catch (error){
+      console.log(error);
+    }
+  }
+
+  // 유저 닉네임으로 유저 정보 조회
+  _getMatchIdList = async () => {
     const matchtype = 50;                              //50: 공식 경기, 52: 감독 모드
     const offset = 0;                                  // 리스트에서 가져올 시작 위치
     const limit = 100;                                 // 리스트에서 가져올 갯수
 
-    const proxyurl = "https://cors-anywhere.herokuapp.com/";
-    let getMatchIdList = 'https://api.nexon.co.kr/fifaonline4/v1.0/users/' + accessId + '/matches?matchtype=' + matchtype + '&offset=' + offset +'&limit=' + limit;
+    let getMatchIdList = 'https://api.nexon.co.kr/fifaonline4/v1.0/users/' + this.state.accessId + '/matches?matchtype=' + matchtype + '&offset=' + offset +'&limit=' + limit;
+
     try{
         return axios.get(getMatchIdList, {
             // 헤더 값 : 권한 시리얼 정보
-            headers : { Authorization : 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2NvdW50X2lkIjoiMTYxMTI5MjUyMiIsImF1dGhfaWQiOiIyIiwidG9rZW5fdHlwZSI6IkFjY2Vzc1Rva2VuIiwic2VydmljZV9pZCI6IjQzMDAxMTQ4MSIsIlgtQXBwLVJhdGUtTGltaXQiOiIyMDAwMDoxMCIsIm5iZiI6MTU3Njk5MzA4MiwiZXhwIjoxNjQwMDY1MDgyLCJpYXQiOjE1NzY5OTMwODJ9.VzsQriixSpYA7CbsWT6RQYvigb5Y9oIzVxikvLgTcRI'}
-        }).then(response =>
+            headers : { Authorization : API_KEY}
+        }).then(response => {
           this.setState({
-            accessId: accessId,
             matchIdList: response.data
           })
-        )
+        })
     } catch (error) {
         console.error(error);
     }
   };
 
   // 매치 상세 기록 조회
-  _getMatchIdDetail = () => {
-    let MatchIdList = this.state.matchIdList;
+  _getMatchIdDetail = async () => {
     let matchResultArray = [];
 
-    for (let i = 0; i < MatchIdList.length; i++) {
-      if(MatchIdList.length === 0){
-        return;
-      }else{
-        const proxyurl = "https://cors-anywhere.herokuapp.com/";
-        let getMatchIdDetail = 'https://api.nexon.co.kr/fifaonline4/v1.0/matches/' + MatchIdList[i];
-        try{
-          axios.get(getMatchIdDetail, {
-            // 헤더 값 : 권한 시리얼 정보
-            headers: {
-              Authorization: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2NvdW50X2lkIjoiMTIyNDc2MTUyOSIsImF1dGhfaWQiOiIyIiwidG9rZW5fdHlwZSI6IkFjY2Vzc1Rva2VuIiwic2VydmljZV9pZCI6IjQzMDAxMTQ4MSIsIlgtQXBwLVJhdGUtTGltaXQiOiIyMDAwMDoxMCIsIm5iZiI6MTU3NzAwODc3MywiZXhwIjoxNjQwMDgwNzczLCJpYXQiOjE1NzcwMDg3NzN9.Pv1OIow11dye_uv69wnVleR93fa4fDrmup1oTXVuUuo'
-            }
+    // TODO 반복문 length 수정 (matchInfo[1] 가져올 때 에러 발생)
+    for (let i = 0; i < 30; i++) {
+        let getMatchIdDetail = 'https://api.nexon.co.kr/fifaonline4/v1.0/matches/' + this.state.matchIdList[i];
+
+      try{
+          await axios.get(getMatchIdDetail, {
+            headers: {Authorization: API_KEY}
           }).then(response => {
             matchResultArray.push(response.data);
-              this.setState({
-                matchResult: matchResultArray,
-                isLoading: false
-              })
+            this.setState({
+              matchResult: matchResultArray
+            })
           })
-        }catch(error){
+        } catch (error) {
           console.error(error);
+        }finally{
+          this.setState({isLoading: false})
         }
       }
-    }
   };
 
   // 경기 결과 버튼 색깔
   handleButton = (matchResult) => {
-    let bg_color;
-
     if(matchResult === "승"){
-      bg_color = "success";
-      return bg_color;
+      return "success";
     }else if(matchResult === "패"){
-      bg_color = "warning";
-      return bg_color;
+      return "warning";
     }else if(matchResult === "무"){
-      bg_color = "secondary";
-      return bg_color;
+      return "secondary";
     }
   };
 
   render() {
-    const {matchResult, isLoading} = this.state;
+    let {matchResult, isLoading} = this.state;
 
-    if(!isLoading){
+    if(!isLoading) {
       // matchDate 내림차순 정렬
-      function date_ascending(a, b){
+      function date_ascending(a, b) {
         let dateA = new Date(a['matchDate']);
         let dateB = new Date(b['matchDate']);
         return dateA < dateB ? 1 : -1;
       }
-      this.state.matchResult.sort(date_ascending);
+
+      matchResult = this.state.matchResult.sort(date_ascending);
 
       // 아이디와 같은지 체크
-      console.log("this.state.accessId:", this.state.accessId);
-      console.log("nickname:", this.state.matchResult);
+      let success = 0;
+      let loss = 0;
+      let draw = 0;
 
-    /*  // TODO 승패무 확률 추가 필요
-      if(this.state.matchResult !== null){
-        if(this.state.accessId === this.state.matchResult.matchInfo[0].nickname){
-          let success = 0;
-          let loss = 0;
-          let draw = 0;
-
-          if(matchResult === "승"){
-            success += 1;
-            console.log("success:",success);
-            return success;
-          }else if(matchResult === "패"){
-            loss += 1;
-            console.log("loss:",loss);
-            return loss;
-          }else if(matchResult === "무"){
-            draw += 1;
-            console.log("draw:",draw);
-            return draw;
+      // TODO 승패무 확률 추가 필요
+      if (this.state.matchResult.length > 0) {
+        for (let i = 0; i < matchResult.length; i++) {
+          if (this.state.nickname === matchResult[i].matchInfo[0].nickname
+              && matchResult[i].matchInfo[0].matchDetail.matchResult === "패") {
+            loss++;
           }
-
         }
-      }*/
+        console.log("loss:", loss, draw);
+        // return loss;
+      }
     }
 
     return (
@@ -205,7 +205,7 @@ class Tables extends React.Component {
                             {index.matchInfo[1].shoot.goalTotal}
                           </span>
                         </th>
-                        <th scope="row" key={index.matchInfo[1].accessId}>
+                        <th scope="row">
                           {index.matchInfo[1].nickname}
                         </th>
                         <th>
