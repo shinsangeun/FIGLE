@@ -271,7 +271,7 @@ class Profile extends React.Component {
                   <Col className="order-lg-2" lg="3">
                     <div className="card-profile-image">
                       <a href="#pablo" onClick={e => e.preventDefault()}>
-                        <img className="rounded-circle" src={require("assets/img/theme/profile.png")} />
+                        <img className="rounded-circle" src={require("../../assets/img/theme/profile.png")} />
                       </a>
                     </div>
                   </Col>
@@ -329,7 +329,7 @@ class Profile extends React.Component {
                           <Col className="order-lg-2" lg="3">
                               <div className="card-profile-image">
                                   <a href="#pablo" onClick={e => e.preventDefault()}>
-                                      <img className="rounded-circle" src={require("assets/img/theme/profile.png")} />
+                                      <img className="rounded-circle" src={require("../../assets/img/theme/profile.png")} />
                                   </a>
                               </div>
                           </Col>
