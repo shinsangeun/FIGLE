@@ -7,12 +7,9 @@ import {
   Marker
 } from "react-google-maps";
 
-// reactstrap components
 import { Card, Container, Row } from "reactstrap";
+import Header from "../../components/Headers/Header.jsx";
 
-// core components
-import Header from "components/Headers/Header.jsx";
-// mapTypeId={google.maps.MapTypeId.ROADMAP}
 const MapWrapper = withScriptjs(
   withGoogleMap(props => (
     <GoogleMap

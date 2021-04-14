@@ -1,7 +1,6 @@
-import Index from "views/Index.jsx";
-import Profile from "views/examples/Profile.jsx";
-import Tables from "views/examples/Tables.jsx";
-import Icons from "views/examples/Icons.jsx";
+import Index from "../src/views/Index.jsx";
+import Profile from "../src/views/examples/Profile.jsx";
+import Tables from "../src/views/examples/Tables.jsx";
 
 var routes = [
   {

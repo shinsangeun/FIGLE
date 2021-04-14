@@ -6,9 +6,9 @@ import "../src/assets/vendor/nucleo/css/nucleo.css";
 import "../src/assets/vendor/@fortawesome/fontawesome-free/css/all.min.css";
 import "../src/assets/scss/argon-dashboard-react.scss";
 
-import AdminLayout from "layouts/Admin.jsx";
-import AuthLayout from "layouts/Auth.jsx";
-import Tables from "views/examples/Tables";
+import AdminLayout from "../src/layouts/Admin.jsx";
+import AuthLayout from "../src/layouts/Auth.jsx";
+import Tables from "../src/views/examples/Tables";
 
 ReactDOM.render(
   <BrowserRouter>

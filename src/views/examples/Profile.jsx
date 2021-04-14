@@ -13,13 +13,13 @@ import {
     Col, Table
 } from "reactstrap";
 // core components
-import UserHeader from "components/Headers/UserHeader.jsx";
+import UserHeader from "../../components/Headers/UserHeader.jsx";
 import Chart from "chart.js";
 // core components
 import {
     chartOptions,
     parseOptions
-} from "variables/charts.jsx";
+} from "../../../src/variables/charts.jsx";
 
 const options = {
     method: 'GET',
