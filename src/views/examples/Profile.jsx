@@ -3,13 +3,11 @@ import axios from "axios";
 
 // reactstrap components
 import {
-    Button,
     Card,
     CardHeader,
     CardBody,
     FormGroup,
     Form,
-    Input,
     Container,
     Row,
     Col, Table
@@ -20,9 +18,7 @@ import Chart from "chart.js";
 // core components
 import {
     chartOptions,
-    parseOptions,
-    chartExample1,
-    chartExample2
+    parseOptions
 } from "variables/charts.jsx";
 
 const options = {
@@ -275,11 +271,7 @@ class Profile extends React.Component {
                   <Col className="order-lg-2" lg="3">
                     <div className="card-profile-image">
                       <a href="#pablo" onClick={e => e.preventDefault()}>
-                        <img
-                          alt="..."
-                          className="rounded-circle"
-                          src={require("assets/img/theme/profile.png")}
-                        />
+                        <img className="rounded-circle" src={require("assets/img/theme/profile.png")} />
                       </a>
                     </div>
                   </Col>
@@ -337,11 +329,7 @@ class Profile extends React.Component {
                           <Col className="order-lg-2" lg="3">
                               <div className="card-profile-image">
                                   <a href="#pablo" onClick={e => e.preventDefault()}>
-                                      <img
-                                          alt="..."
-                                          className="rounded-circle"
-                                          src={require("assets/img/theme/profile.png")}
-                                      />
+                                      <img className="rounded-circle" src={require("assets/img/theme/profile.png")} />
                                   </a>
                               </div>
                           </Col>

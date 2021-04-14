@@ -16,7 +16,6 @@ import {
 // core components
 import Header from "components/Headers/Header.jsx";
 import axios from "axios";
-import GetAccessId from "../../components/Data/GetAccessId";
 
 const API_KEY ='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2NvdW50X2lkIjoiMTIyNDc2MTUyOSIsImF1dGhfaWQiOiIyIiwidG9rZW5fdHlwZSI6IkFjY2Vzc1Rva2VuIiwic2VydmljZV9pZCI6IjQzMDAxMTQ4MSIsIlgtQXBwLVJhdGUtTGltaXQiOiIyMDAwMDoxMCIsIm5iZiI6MTU3NzAwODc3MywiZXhwIjoxNjQwMDgwNzczLCJpYXQiOjE1NzcwMDg3NzN9.Pv1OIow11dye_uv69wnVleR93fa4fDrmup1oTXVuUuo';
 
@@ -138,7 +137,6 @@ class Tables extends React.Component {
       matchResult = this.state.matchResult.sort(date_ascending);
 
       // 아이디와 같은지 체크
-      let success = 0;
       let loss = 0;
       let draw = 0;
 
