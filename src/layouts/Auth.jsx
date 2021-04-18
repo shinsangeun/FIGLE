@@ -39,6 +39,14 @@ class Auth extends React.Component {
     console.log("검색어:", e.target.value);
   };
 
+  componentDidMount() {
+    document.body.classList.add("bg-default");
+  }
+
+  componentWillUnmount() {
+    document.body.classList.remove("bg-default");
+  }
+
   render() {
     return (
       <>
