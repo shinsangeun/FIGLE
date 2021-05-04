@@ -1,7 +1,6 @@
 import React from "react";
 import classnames from "classnames";
-// javascipt plugin for creating charts
-import Chart from "chart.js";
+// import Chart from "chart.js";
 import { Line, Bar } from "react-chartjs-2";
 // reactstrap components
 import {
@@ -25,7 +24,7 @@ import {
   parseOptions,
   chartExample1,
   chartExample2
-} from "variables/charts.jsx";
+} from "../variables/charts.jsx";
 
 import Header from "../components/Headers/Header.jsx";
 
