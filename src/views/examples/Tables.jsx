@@ -2,27 +2,21 @@ import React from "react";
 
 // reactstrap components
 import {
-  Badge,
   Card,
   CardHeader,
   CardFooter,
-  DropdownMenu,
-  DropdownItem,
-  UncontrolledDropdown,
-  DropdownToggle,
-  Media,
   Pagination,
   PaginationItem,
   PaginationLink,
-  Progress,
   Table,
   Container,
   Row,
-  UncontrolledTooltip, Button
+  Button
 } from "reactstrap";
 // core components
 import Header from "components/Headers/Header.jsx";
 import axios from "axios";
+import {Helmet} from "react-helmet";
 
 class Tables extends React.Component {
   constructor(props) {
@@ -157,6 +151,10 @@ class Tables extends React.Component {
 
     return (
       <>
+        <Helmet>
+          <title>FIGLE - 경기 매치 리스트</title>
+        </Helmet>
+
         <Header />
         {/* Page content */}
         <Container className="mt--7" fluid>

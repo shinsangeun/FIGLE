@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { Route, Switch } from "react-router-dom";
 // reactstrap components
-import {Container, Row, Col, Form, InputGroup, Input, InputGroupAddon, InputGroupText, Collapse, Button} from "reactstrap";
+import {Container, Row, Col, Button} from "reactstrap";
 
 // core components
 import AuthNavbar from "components/Navbars/AuthNavbar.jsx";
 import AuthFooter from "components/Footers/AuthFooter.jsx";
 import routes from "routes.js";
 import axios from "axios";
+import {Helmet} from "react-helmet";
 
 class Auth extends React.Component {
   getRoutes = routes => {
@@ -76,6 +77,10 @@ class Auth extends React.Component {
   render() {
     return (
       <>
+        <Helmet>
+          <title>FIGLE - FIFA 온라인 전적 검색</title>
+        </Helmet>
+
         <div className="main-content">
           <AuthNavbar />
           <div className="header bg-gradient-default py-10 py-lg-8">
