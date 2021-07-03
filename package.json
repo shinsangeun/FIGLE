@@ -54,6 +54,7 @@
     "react-scripts": "2.1.8",
     "reactstrap": "^7.1.0",
     "sanitize-html": "^2.4.0",
+    "serve": "^12.0.0",
     "source-map": "^0.7.3",
     "websocket": "^1.0.34"
   },
@@ -61,5 +62,5 @@
     "@types/markerclustererplus": "2.1.33",
     "@types/react": "16.8.7"
   },
-  "homepage": "http://shinsangeun.github.io/FIGLE"
+  "homepage": "https://figle.github.io"
 }

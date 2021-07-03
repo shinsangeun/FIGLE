@@ -2,7 +2,7 @@ module.exports = {
   apps : [{
     name: 'FIGLE',
     script: 'npm',
-    args: 'run serve',
+    args: 'run start',
     instances: 2,
     watch: '.',
     env: {
