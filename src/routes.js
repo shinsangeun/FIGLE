@@ -1,23 +1,7 @@
-import Index from "../src/views/Index.jsx";
 import Profile from "../src/views/examples/Profile.jsx";
 import Tables from "../src/views/examples/Tables.jsx";
-// import Icons from "../src/views/examples/Icons.jsx";
 
 const routes = [
-  {
-    path: "/index",
-    name: "Dashboard",
-    icon: "ni ni-tv-2 text-primary",
-    component: Index,
-    layout: "/admin"
-  },
- /* {
-    path: "/icons",
-    name: "Icons",
-    icon: "ni ni-planet text-blue",
-    component: Icons,
-    layout: "/admin"
-  },*/
   {
     path: "/user-profile",
     name: "User Profile",
