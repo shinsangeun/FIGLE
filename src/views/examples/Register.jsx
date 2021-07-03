@@ -36,7 +36,7 @@ class Register extends React.Component {
                   <span className="btn-inner--icon">
                     <img
                       alt="..."
-                      src={require("assets/img/icons/common/github.svg")}
+                      src={require("../../assets/img/icons/common/github.svg")}
                     />
                   </span>
                   <span className="btn-inner--text">Github</span>

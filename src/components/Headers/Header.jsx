@@ -1,10 +1,8 @@
 import React from "react";
-import { Route, Link } from 'react-router-dom';
 
 // reactstrap components
 import { Card, CardBody, CardTitle, Container, Row, Col } from "reactstrap";
 import axios from "axios";
-import { HashRouter } from 'react-router-dom'
 
 class Header extends React.Component {
   constructor(props) {
@@ -17,22 +15,17 @@ class Header extends React.Component {
   }
 
   componentDidMount= async () => {
-    await this._getMatchIdList();
-    await this._getMatchIdDetail();
+    // await this._getMatchIdList();
+   // await this._getMatchIdDetail();
   };
 
   // 유저 닉네임으로 유저 정보 조회
   _getMatchIdList = () => {
-    ReactDOM.render(
-        <HashRouter>
-          <Route path='' component={App}/>
-        </HashRouter>,
-        document.getElementById('search'));
-
     const search = this.props.location.search;
-    console.log("search:", search);
     const params = new URLSearchParams(search);
+    console.log("search:", search);
     console.log("params:", params);
+
     const accessId = params.get("accessId");
     const matchtype = 50;                              //50: 공식 경기, 52: 감독 모드
     const offset = 0;                                  // 리스트에서 가져올 시작 위치
@@ -98,6 +91,20 @@ class Header extends React.Component {
         return dateA < dateB ? 1 : -1;
       }
       this.state.matchResult.sort(date_ascending);
+
+      let success = 0;
+
+      if(this.state.matchResult.matchInfo[0].matchDetail.matchResult === "승"){
+        success += 1;
+        console.log("success:", success);
+        return success;
+      }else if(matchResult === "패"){
+        let bg_color = "warning";
+        return bg_color;
+      }else if(matchResult === "무"){
+        let bg_color = "secondary";
+        return bg_color;
+      }
     }
 
     return (

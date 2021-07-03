@@ -2,12 +2,12 @@ import React, { Component } from "react";
 import ReactDOM from "react-dom";
 import { BrowserRouter, Route, Switch, Redirect } from "react-router-dom";
 
-import "assets/vendor/nucleo/css/nucleo.css";
-import "assets/vendor/@fortawesome/fontawesome-free/css/all.min.css";
-import "assets/scss/argon-dashboard-react.scss";
+import "../src/assets/vendor/nucleo/css/nucleo.css";
+import "../src/assets/vendor/@fortawesome/fontawesome-free/css/all.min.css";
+import "../src/assets/scss/argon-dashboard-react.scss";
 
-import AdminLayout from "layouts/Admin.jsx";
-import AuthLayout from "layouts/Auth.jsx";
+import AdminLayout from "./layouts/Admin.jsx";
+import AuthLayout from "./layouts/Auth.jsx";
 
 /*
 Switch : 이 컴포넌트에 추가된 첫 번째 Route만 보여주고 나머지는 보여주지 않음.(주의 : 먼저 비교할 Route를 맨 위에 둬야 함.)

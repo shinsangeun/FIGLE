@@ -2,7 +2,6 @@ import React from "react";
 
 // reactstrap components
 import { Button, Container, Row, Col } from "reactstrap";
-import AdminNavbar from "../Navbars/AuthNavbar";
 
 class UserHeader extends React.Component {
     constructor(props) {

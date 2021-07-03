@@ -14,7 +14,7 @@ import {
   Button
 } from "reactstrap";
 // core components
-import Header from "components/Headers/Header.jsx";
+import Header from "../../components/Headers/Header.jsx";
 import axios from "axios";
 import {Helmet} from "react-helmet";
 
@@ -30,7 +30,7 @@ class Tables extends React.Component {
     };
   }
 
-  componentDidMount= async () => {
+  componentDidMount = async () => {
       await this._getMatchIdList();
       await this._getMatchIdDetail();
   };

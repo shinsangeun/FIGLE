@@ -4,9 +4,9 @@ import { Route, Switch } from "react-router-dom";
 import {Container, Row, Col, Button} from "reactstrap";
 
 // core components
-import AuthNavbar from "components/Navbars/AuthNavbar.jsx";
-import AuthFooter from "components/Footers/AuthFooter.jsx";
-import routes from "routes.js";
+import AuthNavbar from "../components/Navbars/AuthNavbar.jsx";
+import AuthFooter from "../components/Footers/AuthFooter.jsx";
+import routes from "../routes.js";
 import axios from "axios";
 import {Helmet} from "react-helmet";
 

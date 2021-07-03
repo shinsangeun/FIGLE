@@ -13,13 +13,13 @@ import {
     Col, Table
 } from "reactstrap";
 // core components
-import UserHeader from "components/Headers/UserHeader.jsx";
+import UserHeader from "../../components/Headers/UserHeader.jsx";
 import Chart from "chart.js";
 // core components
 import {
     chartOptions,
     parseOptions,
-} from "variables/charts.jsx";
+} from "../../variables/charts.jsx";
 import {Helmet} from "react-helmet";
 
 class Profile extends React.Component {
@@ -294,7 +294,7 @@ class Profile extends React.Component {
                                                 <img
                                                     alt="..."
                                                     className="rounded-circle"
-                                                    src={require("assets/img/theme/profile.png")}
+                                                    src={require("../../assets/img/theme/profile.png")}
                                                 />
                                             </a>
                                         </div>
@@ -364,7 +364,7 @@ class Profile extends React.Component {
                                                 <img
                                                     alt="..."
                                                     className="rounded-circle"
-                                                    src={require("assets/img/theme/profile.png")}
+                                                    src={require("../../assets/img/theme/profile.png")}
                                                 />
                                             </a>
                                         </div>

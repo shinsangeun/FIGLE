@@ -333,7 +333,7 @@ let chartExample1 = {
             content += label;
           }
 
-          content += "$" + yLabel + "k";
+        //  content += "$" + yLabel + "k";
           return content;
         }
       }
@@ -345,7 +345,7 @@ let chartExample1 = {
       datasets: [
         {
           label: "Performance",
-          data: [0, 3, 4, 2, 6, 4, 2, 4]
+          data: [6, 3, 4, 2, 6, 4, 2, 4]
         }
       ]
     };
